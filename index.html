@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#080b12" />
+    <meta name="description" content="把 AI 变成工程团队：从 Rust 云服务、可穿戴设备到 500 页技术书" />
+    <title>把 AI 变成工程团队</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="deck" id="deck" aria-live="polite">
+      <header class="topbar">
+        <a class="brand" href="#1" aria-label="回到首页">
+          <span class="brand-mark">AI</span>
+          <span class="brand-copy">ENGINEERING SYSTEM</span>
+        </a>
+        <div class="section-name" id="sectionName"></div>
+        <button class="icon-button" id="overviewButton" title="幻灯片总览（O）" aria-label="幻灯片总览">
+          <span class="grid-icon" aria-hidden="true"></span>
+        </button>
+      </header>
+
+      <main class="stage" id="stage"></main>
+
+      <footer class="bottombar">
+        <div class="topic-dots" id="topicDots" aria-label="章节导航"></div>
+        <div class="controls">
+          <span class="keyboard-hint"><kbd>←</kbd><kbd>→</kbd> 导航</span>
+          <button class="text-button" id="fullscreenButton" title="全屏（F）">全屏</button>
+          <span class="counter"><strong id="currentPage">01</strong><span>/</span><span id="totalPages">60</span></span>
+        </div>
+      </footer>
+      <div class="progress" id="progress"></div>
+    </div>
+
+    <div class="overview" id="overview" aria-hidden="true">
+      <div class="overview-head">
+        <div><span class="eyebrow">NAVIGATOR</span><h2>幻灯片总览</h2></div>
+        <button class="icon-button close-button" id="closeOverview" aria-label="关闭总览">×</button>
+      </div>
+      <div class="overview-grid" id="overviewGrid"></div>
+    </div>
+
+    <div class="help" id="help" aria-hidden="true">
+      <div class="help-card">
+        <button class="icon-button close-button" id="closeHelp" aria-label="关闭帮助">×</button>
+        <span class="eyebrow">KEYBOARD</span>
+        <h2>演示快捷键</h2>
+        <div class="shortcut-grid">
+          <span><kbd>←</kbd> <kbd>→</kbd></span><b>上一页 / 下一页</b>
+          <span><kbd>Space</kbd></span><b>下一页</b>
+          <span><kbd>F</kbd></span><b>进入全屏</b>
+          <span><kbd>O</kbd></span><b>打开总览</b>
+          <span><kbd>Home</kbd> <kbd>End</kbd></span><b>首页 / 末页</b>
+          <span><kbd>?</kbd></span><b>显示帮助</b>
+        </div>
+      </div>
+    </div>
+
+    <script src="visuals.js"></script>
+    <script src="content.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
