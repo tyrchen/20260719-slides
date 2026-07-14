@@ -17,11 +17,19 @@ const sectionColors = {
   '统一方法论':'#ff79b7', '结束':'#59e3ff'
 };
 
+const navigationTargets = [
+  {name:'开场', section:'开场'},
+  {name:'Rustack', section:'话题一 · Rustack'},
+  {name:'可穿戴', section:'话题二 · 可穿戴'},
+  {name:'AI 写书', section:'话题三 · AI 写书'},
+  {name:'方法论', section:'统一方法论'}
+].map(item => ({...item, target:deckSlides.findIndex(slide => slide.section === item.section)}));
+
 function renderSlides() {
   totalPages.textContent = deckSlides.length;
   deckSlides.forEach((s,i) => {
     const el = document.createElement('section');
-    el.className = `slide ${s.type === 'cover' ? 'slide-cover' : ''} ${s.visual ? 'has-visual' : ''}`;
+    el.className = `slide ${s.type === 'cover' ? 'slide-cover' : ''} ${s.visual ? 'has-visual' : ''} ${s.transition ? 'slide-transition' : ''}`;
     el.dataset.index = i;
     el.innerHTML = `<div class="slide-inner"><div class="content"><span class="eyebrow">${s.kicker || s.section}</span><h2>${s.title}</h2>${s.content}</div>${s.visual ? `<div class="slide-visual" aria-hidden="true">${s.visual}</div>` : ''}</div>`;
     stage.appendChild(el);
@@ -36,8 +44,7 @@ function renderSlides() {
 
 function renderDots() {
   const dotWrap = document.getElementById('topicDots');
-  const sections = [['开场',0], ['Rustack',6], ['可穿戴',23], ['AI 写书',40], ['方法论',53]];
-  sections.forEach(([name,target])=>{
+  navigationTargets.forEach(({name,target})=>{
     const b=document.createElement('button');
     b.className='topic-dot'; b.title=name;
     b.addEventListener('click',()=>go(target));
@@ -56,8 +63,7 @@ function go(next, updateHash=true) {
   currentPage.textContent=String(index+1).padStart(2,'0');
   progress.style.width=`${((index+1)/deckSlides.length)*100}%`;
   [...document.querySelectorAll('.overview-card')].forEach((x,i)=>x.classList.toggle('current',i===index));
-  const ranges=[0,6,23,40,53,deckSlides.length];
-  const activeDot=ranges.findIndex((x,i)=>index>=x&&index<ranges[i+1]);
+  const activeDot = navigationTargets.reduce((active, item, i) => index >= item.target ? i : active, 0);
   [...document.querySelectorAll('.topic-dot')].forEach((x,i)=>x.classList.toggle('active',i===activeDot));
   if(updateHash) history.replaceState(null,'',`#${index+1}`);
   document.title=`${String(index+1).padStart(2,'0')} · ${s.title.replace(/<[^>]+>/g,' ')} — 把 AI 变成工程团队`;

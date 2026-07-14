@@ -43,7 +43,7 @@ const slides = [
   S('话题一 · Rustack', 'Spec 不是文档，<br>是 Agent 之间的接口', `<table class="mini-table"><thead><tr><th>DOCUMENT</th><th>SPEC</th></tr></thead><tbody><tr><td>解释系统</td><td>约束系统</td></tr><tr><td>给人阅读</td><td>给人和 Agent 执行</td></tr><tr><td>可以模糊</td><td>减少实现猜测</td></tr><tr><td>描述功能</td><td>边界、错误、测试、退出标准</td></tr></tbody></table>`, {kicker:'CONTRACT'}),
   S('话题一 · Rustack', '从 Phase 到交付', `${flow(['读取 Phase','读取上下文','先补齐 Spec','依赖顺序实现','质量门禁','退出标准','独立 Review'])}<p class="muted" style="margin-top:34px">先让另一位工程师“可以独立实现”，再写生产代码。</p>`, {kicker:'EXECUTION LOOP'}),
   S('话题一 · Rustack', '不要让同一个 Agent<br>包办所有角色', `<div class="grid-3"><div class="card compact"><h3>Research</h3><p>收集事实与未知</p></div><div class="card compact"><h3>Spec</h3><p>约束边界与设计</p></div><div class="card compact"><h3>Implementation</h3><p>按依赖实现</p></div><div class="card compact"><h3>Test</h3><p>构造失败信号</p></div><div class="card compact"><h3>Reviewer</h3><p>独立检查产物</p></div><div class="card compact"><h3>Human</h3><p>方向与最终责任</p></div></div>`, {kicker:'SEPARATION OF CONCERNS'}),
-  S('话题一 · Rustack', '外部测试，是最好的<br>AI 教师', `<div class="grid-2"><div><div class="huge-number">40→80%+</div><p>Alternator 测试把“看起来能用”拆成数百个具体语义差距。</p></div><div>${list(['表达式：优先级、保留字、Nested path','数值：十进制精度与比较语义','响应：ReturnValues 与分页边界','约束：1 MB 限制与 Validation 顺序'])}</div></div>${evidence('关键变化','Agent 不再猜“DynamoDB 应该怎样”，而是针对可复现的失败补齐最小语义。')}`, {kicker:'MACHINE-READABLE FEEDBACK'}),
+  S('话题一 · Rustack', '外部测试，是最好的<br>AI 教师', `<div class="metric-layout"><div><div class="metric-change"><span>40</span><i>→</i><span>80<sup>%+</sup></span></div><p>Alternator 测试把“看起来能用”拆成数百个具体语义差距。</p></div><div>${list(['表达式：优先级、保留字、Nested path','数值：十进制精度与比较语义','响应：ReturnValues 与分页边界','约束：1 MB 限制与 Validation 顺序'])}</div></div>${evidence('关键变化','Agent 不再猜“DynamoDB 应该怎样”，而是针对可复现的失败补齐最小语义。')}`, {kicker:'MACHINE-READABLE FEEDBACK'}),
   S('话题一 · Rustack', 'AI 不怕测试失败', `<p class="quote">AI 怕的是没有高质量、机器可读的失败信号。</p><div class="formula" style="margin-top:36px">失败测试 → 定位协议语义 → 小范围修改 → 回归验证</div>`, {kicker:'THE REAL FEEDBACK LOOP'}),
   S('话题一 · Rustack', '现场 Demo：<br>展示修复，不展示魔术', `<div class="grid-2"><div>${list(['启动固定版本 Rustack','CLI 操作 S3','SDK 操作 DynamoDB','触发一个已有失败测试'])}</div><div class="card"><span class="eyebrow">6–8 MIN</span><h3>失败 → 定位 → 修改 → 通过</h3><p>边界清楚、结果可验证、随机性可控。</p></div></div>`, {kicker:'DEMO DESIGN'}),
   S('话题一 · Rustack', 'Rustack 的复利资产', cards([
@@ -55,7 +55,7 @@ const slides = [
   S('话题一 · Rustack', '软件世界的<br>最终验证者', `<div class="huge-number">TEST</div><p class="lead">协议、兼容性、Benchmark 与独立 Review。</p>`, {type:'cover', kicker:'TOPIC 01 · CONCLUSION'}),
 
   // 23 中场
-  S('转场', '同一套方法，<br>进入物理世界', `<p class="lead">测试可以模拟软件。<br>但功耗、无线、电池与人体运动不会配合模型的想象。</p>`, {type:'cover', kicker:'FROM BITS TO ATOMS'}),
+  S('转场', '从可重复的测试，<br>到不可忽略的现实', `<p class="lead">软件里的失败可以重放；物理世界还会加入温度、遮挡、冲击、噪声和人的动作。</p>${chip(['TEST → MEASURE','CODE → SIGNAL','ASSUMPTION → EXPERIMENT'])}`, {type:'cover', transition:true, kicker:'FROM BITS TO ATOMS', visual:VISUALS.softwareToHardware}),
 
   // 24–39 Wearable 16
   S('话题二 · 可穿戴', '02<br><span class="accent">打造软硬件全栈系统</span>', `<p class="lead">从脚下的 IMU、BLE 链路和手机 Session，到云端特征管线：每一个设计判断都要回到测量。</p>${chip(['EDGE','BLE','MOBILE','CLOUD','ML'])}`, {type:'cover', kicker:'TOPIC 02 · HARDWARE', visual:VISUALS.wearable}),
@@ -81,7 +81,7 @@ const slides = [
   S('话题二 · 可穿戴', '物理世界是<br>最终测试套件', `<div class="huge-number">MEASURE</div><p class="lead">AI 可以压缩学习时间，但不能替代测量、实验与现场验证。</p>`, {type:'cover', kicker:'TOPIC 02 · CONCLUSION'}),
 
   // 40 转场
-  S('转场', '从物理系统，<br>进入知识系统', `<p class="lead">这里没有电流分析仪。<br>最终信号变成来源、审稿、读者理解与出版质量。</p>`, {type:'cover', kicker:'FROM ATOMS TO IDEAS'}),
+  S('转场', '从测量物理信号，<br>到建立读者信任', `<p class="lead">知识产品同样需要校准：事实靠来源，结构靠概念依赖，表达靠审稿，最终由读者理解来验证。</p>${chip(['SIGNAL → SOURCE','CALIBRATION → REVIEW','DATA → EXPLANATION'])}`, {type:'cover', transition:true, kicker:'FROM ATOMS TO IDEAS', visual:VISUALS.hardwareToKnowledge}),
 
   // 41–53 Book 13
   S('话题三 · AI 写书', '03<br><span class="accent">构建长期一致的知识系统</span>', `<p class="lead">章节只是局部产物；真正的系统还包括读者契约、概念依赖、来源、审稿、构建与发布。</p>${chip(['PLAN','RESEARCH','DRAFT','REVIEW','BUILD'])}`, {type:'cover', kicker:'TOPIC 03 · KNOWLEDGE', visual:VISUALS.book}),
@@ -103,7 +103,8 @@ const slides = [
   S('话题三 · AI 写书', 'AI 写书的真实成本', `<div class="grid-4"><div class="stat"><strong>400–500</strong><span>页 / 本</span></div><div class="stat"><strong>25h+</strong><span>Agent 工作</span></div><div class="stat"><strong>40–50%</strong><span>周额度</span></div><div class="stat"><strong>5–10h</strong><span>人工审校</span></div></div><p class="lead" style="margin-top:46px">不是一键生成，而是把数月重复劳动压缩为高密度的工程流程。</p>`, {kicker:'REALITY CHECK'}),
   S('话题三 · AI 写书', '知识系统的<br>最终验证者', `<div class="huge-number">TRUST</div><p class="lead">来源、审稿、读者理解与出版质量。</p>`, {type:'cover', kicker:'TOPIC 03 · CONCLUSION'}),
 
-  // 54–60 Unified 7
+  // 统一方法论
+  S('转场', '三种工程对象，<br>汇入同一个闭环', `<p class="lead">代码、设备和书稿看似不同；它们都需要把意图变成约束，把执行接入反馈，再把修正沉淀为记忆。</p>${chip(['SPEC','EXECUTION','VERIFICATION','MEMORY'])}`, {type:'cover', transition:true, kicker:'THREE WORLDS · ONE LOOP', visual:VISUALS.converge}),
   S('统一方法论', '三个世界，<br>同一个工程闭环', `<table class="mini-table"><thead><tr><th>CASE</th><th>OBJECT</th><th>HARD PART</th><th>VALIDATOR</th></tr></thead><tbody><tr><td>Rustack</td><td>纯软件</td><td>协议与兼容性</td><td>测试 / Benchmark</td></tr><tr><td>可穿戴</td><td>软硬件</td><td>功耗、无线、端云</td><td>测量 / 实物 / 现场</td></tr><tr><td>AI 写书</td><td>知识内容</td><td>事实、结构、文风</td><td>来源 / 审稿 / 读者</td></tr></tbody></table>`, {kicker:'ONE METHOD'}),
   S('统一方法论', 'AI 原生工程循环', `${flow(['Intent<br><small>问题与目标</small>','Constraints<br><small>边界与预算</small>','Specs<br><small>可执行描述</small>','Decompose<br><small>Phase / Milestone</small>','Execute<br><small>研究 / 实现</small>','Verify<br><small>测试 / 测量 / 审稿</small>','Memory<br><small>Git / Spec / Skill</small>'])}<div class="loop-example"><b>一次失败如何复利：</b><span>S3 XML 解析错误</span><i>→</i><span>新增回归测试</span><i>→</i><span>补充协议 Spec</span><i>→</i><span>以后默认正确</span></div>`, {kicker:'THE LOOP'}),
   S('统一方法论', '人的工作发生了什么变化？', `<div class="compare"><div class="compare-side"><span class="eyebrow">BEFORE</span>${flow(['理解','设计','编码','调试','测试'])}</div><div class="versus">SHIFT</div><div class="compare-side highlight"><span class="eyebrow">NOW</span>${list(['定义问题与约束','设计验证方法','分解和调度任务','审查产物','处理例外与未知'])}</div></div>`),

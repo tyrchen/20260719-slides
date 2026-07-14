@@ -58,4 +58,31 @@ const book = visualFrame(`
     <g font-family="monospace" font-size="14" fill="currentColor"><text x="86" y="54">PLAN</text><text x="369" y="54">REVIEW</text><text x="175" y="534">SOURCE → BUILD → RELEASE</text></g>
   </g>`);
 
-window.VISUALS = { hero, rustack, wearable, book };
+const softwareToHardware = visualFrame(`
+  <g transform="translate(66 102)" fill="none" stroke="currentColor">
+    <rect x="0" y="52" width="210" height="162" rx="4" fill="#080b12"/><path d="M0 92h210M25 124h105M25 151h142M25 178h76" stroke-opacity=".32"/>
+    <path d="M270 134h122" stroke-width="2" stroke-dasharray="5 10"/><path d="m379 121 16 13-16 13"/>
+    <g transform="translate(416 26)"><path d="M29 159c39-18 63-57 77-112 6-20 28-27 40-10 18 24 31 47 47 67 17 22 38 32 71 43 22 7 40 25 40 45 0 21-16 35-43 35H48c-42 0-61-49-19-68z" fill="url(#panel)"/><rect x="79" y="133" width="58" height="38" rx="5" fill="#080b12"/><circle cx="108" cy="152" r="7" fill="currentColor" stroke="none"/></g>
+    <path d="M174 322c35-69 70 70 106 0s72 70 108 0 72 70 108 0" stroke-opacity=".7"/>
+    <g fill="currentColor" stroke="none" font-family="monospace" font-size="14"><text x="12" y="20">DETERMINISTIC TEST</text><text x="426" y="20">PHYSICAL SIGNAL</text><text x="159" y="410">CODE → MEASUREMENT</text></g>
+  </g>`);
+
+const hardwareToKnowledge = visualFrame(`
+  <g transform="translate(58 105)" fill="none" stroke="currentColor">
+    <path d="M0 150c38-92 76 92 114 0s76 92 114 0" stroke-width="2"/>
+    <g fill="currentColor" stroke="none"><circle cx="254" cy="150" r="6"/><circle cx="286" cy="116" r="5" opacity=".8"/><circle cx="286" cy="184" r="5" opacity=".55"/><circle cx="319" cy="92" r="4" opacity=".35"/><circle cx="319" cy="208" r="4" opacity=".25"/></g>
+    <path d="M351 62 476 17l125 45-125 47z" fill="url(#panel)"/><path d="M351 62v236l125 55V109M601 62v236l-125 55" fill="#080b12" fill-opacity=".5"/><path d="M376 133h75M376 166h75M376 199h75M501 133h75M501 166h75M501 199h75" stroke-opacity=".25"/>
+    <g fill="currentColor" stroke="none" font-family="monospace" font-size="14"><text x="0" y="20">RAW SIGNAL</text><text x="386" y="20">STRUCTURED KNOWLEDGE</text><text x="121" y="410">DATA → EXPLANATION → TRUST</text></g>
+  </g>`);
+
+const converge = visualFrame(`
+  <g transform="translate(95 90)" fill="none" stroke="currentColor">
+    <circle cx="245" cy="248" r="78" fill="url(#panel)"/><circle cx="245" cy="248" r="14" fill="currentColor"/>
+    <circle cx="78" cy="94" r="62"/><circle cx="412" cy="94" r="62"/><circle cx="245" cy="448" r="62"/>
+    <path d="m120 139 72 67M370 139l-72 67M245 386v-60" stroke-width="2" stroke-dasharray="5 9"/>
+    <path d="M78 75v38M59 94h38M389 92h46M245 423v50M220 448h50" stroke-opacity=".6"/>
+    <path d="M165 248a80 80 0 0 1 151-36" stroke-width="3"/><path d="m308 196 17 17-23 8"/>
+    <g fill="currentColor" stroke="none" font-family="monospace" font-size="14" text-anchor="middle"><text x="78" y="15">SOFTWARE</text><text x="412" y="15">HARDWARE</text><text x="245" y="533">KNOWLEDGE</text></g>
+  </g>`);
+
+window.VISUALS = { hero, rustack, wearable, book, softwareToHardware, hardwareToKnowledge, converge };
