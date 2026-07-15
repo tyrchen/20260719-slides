@@ -1,0 +1,4 @@
+interface:
+  display_name: "高质量幻灯片网站"
+  short_description: "设计、实现并验证叙事清晰且视觉有说服力的现代幻灯片网站"
+  default_prompt: "使用 $build-high-quality-slides 设计或审校一个现代中文幻灯片网站，并完成视觉与布局验证。"
