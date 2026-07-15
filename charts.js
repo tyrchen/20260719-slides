@@ -115,6 +115,69 @@
     core.transition().duration(700).attr('opacity',1);
   }
 
+  function convergence(el) {
+    const c=colors(), svg=svgFor(el,680,600), cx=340, cy=292, ringRadius=116;
+    const palette={software:'#6b8cff',hardware:'#b9f46c',knowledge:'#ffad66'};
+    const defs=svg.append('defs');
+    Object.entries(palette).forEach(([name,color])=>{
+      defs.append('marker').attr('id',`converge-${name}`).attr('viewBox','0 0 10 10').attr('refX',9).attr('refY',5)
+        .attr('markerWidth',6).attr('markerHeight',6).attr('orient','auto')
+        .append('path').attr('d','M0 0 L10 5 L0 10 Z').attr('fill',color);
+    });
+    const glow=defs.append('filter').attr('id','converge-glow');
+    glow.append('feGaussianBlur').attr('stdDeviation',3).attr('result','blur');
+
+    const sources=[
+      {id:'software',title:'软件',proof:'测试',x:105,y:105,tx:235,ty:260,path:'M154,139 C178,171 190,220 235,260'},
+      {id:'hardware',title:'软硬件',proof:'测量',x:575,y:105,tx:445,ty:260,path:'M526,139 C502,171 490,220 445,260'},
+      {id:'knowledge',title:'知识',proof:'来源 · 审稿',x:340,y:492,tx:340,ty:408,path:'M340,434 C340,426 340,418 340,408'}
+    ].map(d=>({...d,color:palette[d.id]}));
+
+    const streams=svg.append('g').selectAll('path').data(sources).join('path').attr('d',d=>d.path).attr('fill','none')
+      .attr('stroke',d=>d.color).attr('stroke-width',2.5).attr('stroke-opacity',.58).attr('stroke-dasharray','5 9')
+      .attr('marker-end',d=>`url(#converge-${d.id})`);
+    streams.each(function(){const len=this.getTotalLength();d3.select(this).attr('stroke-dashoffset',len).transition().duration(950).attr('stroke-dashoffset',0);});
+
+    const source=svg.append('g').selectAll('g').data(sources).join('g').attr('transform',d=>`translate(${d.x},${d.y})`);
+    source.append('circle').attr('r',58).attr('fill',d=>d.color).attr('fill-opacity',.07).attr('stroke',d=>d.color).attr('stroke-width',2);
+    source.append('circle').attr('r',47).attr('fill',c.bg).attr('stroke',d=>d.color).attr('stroke-opacity',.3);
+    source.append('text').attr('text-anchor','middle').attr('y',-6).attr('fill',c.text).attr('font-size',20).attr('font-weight',700).text(d=>d.title);
+    source.append('text').attr('text-anchor','middle').attr('y',23).attr('fill',d=>d.color).attr('font-size',13).attr('font-weight',650).text(d=>d.proof);
+
+    const ringPath=`M${cx},${cy-ringRadius} A${ringRadius},${ringRadius} 0 1 1 ${cx},${cy+ringRadius} A${ringRadius},${ringRadius} 0 1 1 ${cx},${cy-ringRadius}`;
+    svg.append('path').attr('d',ringPath).attr('fill','none').attr('stroke',c.accent).attr('stroke-width',16).attr('stroke-opacity',.055);
+    svg.append('path').attr('d',ringPath).attr('fill','none').attr('stroke',c.accent).attr('stroke-width',2).attr('stroke-opacity',.52).attr('stroke-dasharray','4 8');
+
+    const core=svg.append('g').attr('transform',`translate(${cx},${cy})`);
+    core.append('circle').attr('r',78).attr('fill',c.accent).attr('fill-opacity',.09).attr('stroke',c.accent).attr('stroke-width',2);
+    core.append('circle').attr('r',61).attr('fill',c.bg).attr('stroke',c.accent).attr('stroke-opacity',.32);
+    core.append('text').attr('text-anchor','middle').attr('y',-7).attr('fill',c.accent).attr('font-size',16).attr('font-weight',650).text('同一套');
+    core.append('text').attr('text-anchor','middle').attr('y',23).attr('fill',c.text).attr('font-size',22).attr('font-weight',750).text('工程方法');
+
+    const steps=[['目标',0,-ringRadius],['执行',ringRadius,0],['验证',0,ringRadius],['记忆',-ringRadius,0]];
+    const step=core.selectAll('g.step').data(steps).join('g').attr('class','step').attr('transform',d=>`translate(${d[1]},${d[2]})`);
+    step.append('rect').attr('x',-30).attr('y',-16).attr('width',60).attr('height',32).attr('rx',16).attr('fill',c.bg).attr('stroke',c.accent).attr('stroke-width',1.5);
+    step.append('text').attr('text-anchor','middle').attr('y',5).attr('fill',c.text).attr('font-size',13).attr('font-weight',650).text(d=>d[0]);
+
+    svg.append('text').attr('x',cx).attr('y',592).attr('text-anchor','middle').attr('fill',c.muted).attr('font-size',13).text('对象不同 · 证据不同 · 方法相同');
+
+    const loopAlong=(pathNode,color,delay,duration,radius=4)=>{
+      const len=pathNode.getTotalLength();
+      const particle=svg.append('circle').attr('r',radius).attr('fill',color).attr('opacity',0).attr('filter','url(#converge-glow)');
+      const run=()=>{
+        const slide=el.closest('.slide');
+        if(!particle.node()?.isConnected || !slide?.classList.contains('active')) { particle.interrupt().attr('opacity',0); return; }
+        particle.attr('opacity',0).transition().delay(delay).duration(duration).ease(d3.easeLinear).attr('opacity',1)
+          .attrTween('transform',()=>t=>{const p=pathNode.getPointAtLength(t*len);return `translate(${p.x},${p.y})`;})
+          .transition().duration(120).attr('opacity',0).on('end',run);
+      };
+      run();
+    };
+    streams.each(function(d,i){d3.range(2).forEach(n=>loopAlong(this,d.color,260+n*520+i*90,1250,4));});
+    const orbit=svg.append('path').attr('d',ringPath).attr('fill','none').attr('stroke','transparent').node();
+    d3.range(4).forEach(i=>loopAlong(orbit,c.accent,i*360,1750,3.5));
+  }
+
   function flywheel(el) {
     const c=colors(), svg=svgFor(el,1100,350), cx=220, cy=164, radius=112;
     const palette={software:'#6b8cff',hardware:'#b9f46c',knowledge:'#ffad66'};
@@ -204,6 +267,145 @@
     draw(human,c.accent,'人的判断与注意力',-12); draw(automation,'#59e3ff','AI 可自动化程度',20);
     svg.selectAll('.stage').data(stages).join('text').attr('class','stage').attr('x',d=>x(d)).attr('y',330).attr('text-anchor','middle').attr('fill',c.text).attr('font-size',18).attr('font-weight',600).text(d=>d);
     svg.append('text').attr('x',margin.l).attr('y',22).attr('fill',c.muted).attr('font-size',13).text('相对强度 · 概念示意');
+  }
+
+  function teamTopology(el) {
+    const c=colors(), svg=svgFor(el,1100,370), feedback='#59e3ff', alert='#ffad66';
+    const defs=svg.append('defs');
+    [['accent',c.accent],['feedback',feedback],['alert',alert]].forEach(([name,color])=>{
+      defs.append('marker').attr('id',`team-${name}`).attr('viewBox','0 0 10 10').attr('refX',9).attr('refY',5)
+        .attr('markerWidth',6).attr('markerHeight',6).attr('orient','auto')
+        .append('path').attr('d','M0 0 L10 5 L0 10 Z').attr('fill',color);
+    });
+    const glow=defs.append('filter').attr('id','team-glow');
+    glow.append('feGaussianBlur').attr('stdDeviation',2.6).attr('result','blur');
+
+    const human=svg.append('g').attr('transform','translate(28,125)');
+    human.append('rect').attr('width',164).attr('height',116).attr('rx',4).attr('fill',c.accent).attr('fill-opacity',.08).attr('stroke',c.accent).attr('stroke-width',2);
+    human.append('text').attr('x',82).attr('y',39).attr('text-anchor','middle').attr('fill',c.text).attr('font-size',21).attr('font-weight',750).text('负责人');
+    human.append('text').attr('x',82).attr('y',67).attr('text-anchor','middle').attr('fill',c.accent).attr('font-size',12).text('方向 · 取舍 · 权限');
+    human.append('text').attr('x',82).attr('y',92).attr('text-anchor','middle').attr('fill',c.muted).attr('font-size',10).text('决定边界，也负责接管异常');
+
+    const reality=svg.append('g').attr('transform','translate(908,125)');
+    reality.append('rect').attr('width',164).attr('height',116).attr('rx',4).attr('fill',feedback).attr('fill-opacity',.06).attr('stroke',feedback).attr('stroke-width',2);
+    reality.append('text').attr('x',82).attr('y',39).attr('text-anchor','middle').attr('fill',c.text).attr('font-size',21).attr('font-weight',750).text('真实反馈');
+    reality.append('text').attr('x',82).attr('y',67).attr('text-anchor','middle').attr('fill',feedback).attr('font-size',12).text('用户 · 测试 · 生产');
+    reality.append('text').attr('x',82).attr('y',92).attr('text-anchor','middle').attr('fill',c.muted).attr('font-size',10).text('结果必须回到现实接受检验');
+
+    svg.append('rect').attr('x',236).attr('y',44).attr('width',628).attr('height',272).attr('rx',136)
+      .attr('fill',c.accent).attr('fill-opacity',.022).attr('stroke',c.accent).attr('stroke-opacity',.42).attr('stroke-dasharray','4 7');
+    svg.append('text').attr('x',550).attr('y',65).attr('text-anchor','middle').attr('fill',c.accent).attr('font-size',11).attr('font-weight',650).attr('letter-spacing',1.4).text('Agent 协作区 · 任务边界与权限');
+
+    const agents=[
+      {id:'research',name:'研究',sub:'事实与未知',x:350,y:125},
+      {id:'spec',name:'规格',sub:'边界与设计',x:550,y:105},
+      {id:'build',name:'实现',sub:'代码与内容',x:750,y:125},
+      {id:'test',name:'测试',sub:'制造证据',x:350,y:245},
+      {id:'review',name:'审查',sub:'独立检查',x:550,y:265},
+      {id:'operate',name:'运行',sub:'交付与观察',x:750,y:245}
+    ];
+    const byId=Object.fromEntries(agents.map(d=>[d.id,d]));
+    const links=[
+      ['research','spec'],['spec','build'],['research','test'],['spec','review'],
+      ['build','operate'],['test','review'],['review','operate'],['build','test']
+    ].map(([from,to])=>({from:byId[from],to:byId[to]}));
+    const mesh=svg.append('g').selectAll('path').data(links).join('path')
+      .attr('d',d=>`M${d.from.x},${d.from.y} Q${(d.from.x+d.to.x)/2},${(d.from.y+d.to.y)/2-18} ${d.to.x},${d.to.y}`)
+      .attr('fill','none').attr('stroke',c.accent).attr('stroke-opacity',.24).attr('stroke-width',1.5).attr('marker-end','url(#team-accent)');
+    mesh.each(function(){const len=this.getTotalLength();d3.select(this).attr('stroke-dasharray',len).attr('stroke-dashoffset',len).transition().duration(900).attr('stroke-dashoffset',0);});
+
+    const node=svg.append('g').selectAll('g').data(agents).join('g').attr('transform',d=>`translate(${d.x},${d.y})`);
+    node.append('rect').attr('x',-65).attr('y',-30).attr('width',130).attr('height',60).attr('rx',3).attr('fill',c.bg).attr('stroke',c.line);
+    node.append('circle').attr('cx',-49).attr('cy',-14).attr('r',3).attr('fill',c.accent);
+    node.append('text').attr('text-anchor','middle').attr('y',-2).attr('fill',c.text).attr('font-size',16).attr('font-weight',680).text(d=>d.name);
+    node.append('text').attr('text-anchor','middle').attr('y',18).attr('fill',c.muted).attr('font-size',10).text(d=>d.sub);
+
+    const delegation=svg.append('path').attr('d','M192,183 C215,183 228,183 255,183').attr('fill','none').attr('stroke',c.accent).attr('stroke-width',3).attr('marker-end','url(#team-accent)');
+    svg.append('text').attr('x',224).attr('y',166).attr('text-anchor','middle').attr('fill',c.accent).attr('font-size',10).text('任务 · 权限');
+    const delivery=svg.append('path').attr('d','M845,183 C870,183 885,183 908,183').attr('fill','none').attr('stroke',feedback).attr('stroke-width',3).attr('marker-end','url(#team-feedback)');
+    svg.append('text').attr('x',876).attr('y',166).attr('text-anchor','middle').attr('fill',feedback).attr('font-size',10).text('产物 · 证据');
+
+    const feedbackPath=svg.append('path').attr('d','M990,242 C930,342 725,350 550,315').attr('fill','none').attr('stroke',feedback).attr('stroke-width',2.5).attr('stroke-opacity',.7).attr('stroke-dasharray','6 7').attr('marker-end','url(#team-feedback)');
+    svg.append('text').attr('x',790).attr('y',352).attr('text-anchor','middle').attr('fill',feedback).attr('font-size',11).text('常规反馈回到 Agent 协作区');
+    const escalation=svg.append('path').attr('d','M990,125 C900,14 235,14 110,125').attr('fill','none').attr('stroke',alert).attr('stroke-width',2.5).attr('stroke-opacity',.72).attr('stroke-dasharray','7 8').attr('marker-end','url(#team-alert)');
+    svg.append('text').attr('x',550).attr('y',23).attr('text-anchor','middle').attr('fill',alert).attr('font-size',11).attr('font-weight',650).text('方向变化、风险和例外，升级给人');
+
+    const loopAlong=(pathNode,color,delay,duration,radius=4)=>{
+      const len=pathNode.getTotalLength(), particle=svg.append('circle').attr('r',radius).attr('fill',color).attr('opacity',0).attr('filter','url(#team-glow)');
+      const run=()=>{
+        const slide=el.closest('.slide');
+        if(!particle.node()?.isConnected || !slide?.classList.contains('active')) { particle.interrupt().attr('opacity',0); return; }
+        particle.attr('opacity',0).transition().delay(delay).duration(duration).ease(d3.easeLinear).attr('opacity',1)
+          .attrTween('transform',()=>t=>{const p=pathNode.getPointAtLength(t*len);return `translate(${p.x},${p.y})`;})
+          .transition().duration(100).attr('opacity',0).on('end',run);
+      };
+      run();
+    };
+    d3.range(2).forEach(i=>loopAlong(delegation.node(),c.accent,i*420,850,4));
+    [0,1,5,6].forEach((index,i)=>loopAlong(mesh.nodes()[index],c.accent,280+i*170,1050,3.5));
+    d3.range(2).forEach(i=>loopAlong(delivery.node(),feedback,180+i*420,850,4));
+    d3.range(2).forEach(i=>loopAlong(feedbackPath.node(),feedback,420+i*650,1900,4));
+    loopAlong(escalation.node(),alert,900,2500,5);
+  }
+
+  function futureCompass(el) {
+    const c=colors(), svg=svgFor(el,1100,380), cx=550, cy=190;
+    const palette={direction:'#6b8cff',evidence:'#b9f46c',imagination:'#ff79b7',responsibility:'#ffad66'};
+    const defs=svg.append('defs');
+    Object.entries(palette).forEach(([name,color])=>{
+      defs.append('marker').attr('id',`future-${name}`).attr('viewBox','0 0 10 10').attr('refX',9).attr('refY',5)
+        .attr('markerWidth',6).attr('markerHeight',6).attr('orient','auto')
+        .append('path').attr('d','M0 0 L10 5 L0 10 Z').attr('fill',color);
+    });
+    const glow=defs.append('filter').attr('id','future-glow');
+    glow.append('feGaussianBlur').attr('stdDeviation',3).attr('result','blur');
+
+    const choices=[
+      {id:'direction',title:'方向',question:'什么值得做？',x:205,y:92,path:'M495,154 C440,105 375,92 330,92'},
+      {id:'evidence',title:'证据',question:'怎样知道做对了？',x:895,y:92,path:'M605,154 C660,105 725,92 770,92'},
+      {id:'imagination',title:'想象力',question:'还可能创造什么？',x:205,y:288,path:'M495,226 C440,275 375,288 330,288'},
+      {id:'responsibility',title:'责任',question:'谁来承担后果？',x:895,y:288,path:'M605,226 C660,275 725,288 770,288'}
+    ].map(d=>({...d,color:palette[d.id]}));
+
+    const spokes=svg.append('g').selectAll('path').data(choices).join('path').attr('d',d=>d.path).attr('fill','none')
+      .attr('stroke',d=>d.color).attr('stroke-width',2.5).attr('stroke-opacity',.52).attr('marker-end',d=>`url(#future-${d.id})`);
+    spokes.each(function(){const len=this.getTotalLength();d3.select(this).attr('stroke-dasharray',len).attr('stroke-dashoffset',len).transition().duration(1000).attr('stroke-dashoffset',0);});
+
+    const choice=svg.append('g').selectAll('g').data(choices).join('g').attr('transform',d=>`translate(${d.x},${d.y})`);
+    choice.append('rect').attr('x',-125).attr('y',-38).attr('width',250).attr('height',76).attr('rx',4).attr('fill',d=>d.color).attr('fill-opacity',.055).attr('stroke',d=>d.color).attr('stroke-opacity',.62);
+    choice.append('rect').attr('x',-125).attr('y',-38).attr('width',4).attr('height',76).attr('fill',d=>d.color);
+    choice.append('text').attr('x',-101).attr('y',-7).attr('fill',d=>d.color).attr('font-size',12).attr('font-weight',700).text(d=>d.title);
+    choice.append('text').attr('x',-101).attr('y',20).attr('fill',c.text).attr('font-size',18).attr('font-weight',650).text(d=>d.question);
+
+    const topicColors=['#6b8cff','#b9f46c','#ffad66'];
+    const arc=d3.arc().innerRadius(79).outerRadius(88).cornerRadius(4);
+    topicColors.forEach((color,i)=>svg.append('path').attr('transform',`translate(${cx},${cy})`)
+      .attr('d',arc({startAngle:-Math.PI/2+i*Math.PI*2/3+.045,endAngle:-Math.PI/2+(i+1)*Math.PI*2/3-.045}))
+      .attr('fill',color).attr('fill-opacity',.82));
+    svg.append('circle').attr('cx',cx).attr('cy',cy).attr('r',67).attr('fill',c.bg).attr('stroke',c.accent).attr('stroke-opacity',.38);
+    svg.append('circle').attr('cx',cx).attr('cy',cy).attr('r',58).attr('fill',c.accent).attr('fill-opacity',.08);
+    svg.append('text').attr('x',cx).attr('y',cy-7).attr('text-anchor','middle').attr('fill',c.text).attr('font-size',24).attr('font-weight',760).text('我们');
+    svg.append('text').attr('x',cx).attr('y',cy+22).attr('text-anchor','middle').attr('fill',c.accent).attr('font-size',13).attr('font-weight',650).text('选择方向');
+    [['软件',cx,cy-103,topicColors[0]],['软硬件',cx+91,cy+73,topicColors[1]],['知识',cx-91,cy+73,topicColors[2]]].forEach(([label,x,y,color])=>
+      svg.append('text').attr('x',x).attr('y',y).attr('text-anchor','middle').attr('fill',color).attr('font-size',10).attr('font-weight',650).text(label));
+
+    svg.append('text').attr('x',cx).attr('y',371).attr('text-anchor','middle').attr('fill',c.muted).attr('font-size',15).attr('font-weight',550).text('AI 提供速度，人决定方向。问题从这里开始。');
+
+    const ringPath=`M${cx},${cy-84} A84,84 0 1 1 ${cx},${cy+84} A84,84 0 1 1 ${cx},${cy-84}`;
+    const orbit=svg.append('path').attr('d',ringPath).attr('fill','none').attr('stroke','transparent').node();
+    const loopAlong=(pathNode,color,delay,duration,radius=4)=>{
+      const len=pathNode.getTotalLength(), particle=svg.append('circle').attr('r',radius).attr('fill',color).attr('opacity',0).attr('filter','url(#future-glow)');
+      const run=()=>{
+        const slide=el.closest('.slide');
+        if(!particle.node()?.isConnected || !slide?.classList.contains('active')) { particle.interrupt().attr('opacity',0); return; }
+        particle.attr('opacity',0).transition().delay(delay).duration(duration).ease(d3.easeLinear).attr('opacity',1)
+          .attrTween('transform',()=>t=>{const p=pathNode.getPointAtLength(t*len);return `translate(${p.x},${p.y})`;})
+          .transition().duration(110).attr('opacity',0).on('end',run);
+      };
+      run();
+    };
+    d3.range(6).forEach(i=>loopAlong(orbit,topicColors[i%3],i*280,1750,3.5));
+    spokes.each(function(d,i){loopAlong(this,d.color,620+i*210,1450,4);});
   }
 
   function value(el) {
@@ -361,7 +563,7 @@
     loopParticle(feedback.node(),palette.insight,350,2100,5);
   }
 
-  const renderers={factors,evolution,compatibility,system,flywheel,lifecycle,value,roadmap,productLoop};
+  const renderers={factors,evolution,compatibility,system,convergence,flywheel,lifecycle,teamTopology,futureCompass,value,roadmap,productLoop};
   window.renderD3Chart = el => { const fn=renderers[el.dataset.chart]; if(fn && window.d3) fn(el); };
   window.renderChartsInSlide = slide => slide?.querySelectorAll('[data-chart]').forEach(window.renderD3Chart);
 })();
