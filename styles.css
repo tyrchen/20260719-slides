@@ -236,7 +236,7 @@ ul.clean li::before { content:""; width:7px; height:7px; background:var(--accent
 .human-node,.feedback-node { border:1px solid var(--accent); padding:28px 20px; text-align:center; background:color-mix(in srgb,var(--accent) 6%,transparent); }
 .human-node b,.feedback-node b { display:block; font-size:20px; }.human-node span,.feedback-node span { color:var(--muted); font-size:13px; }
 .agent-ring { min-height:290px; border:1px dashed color-mix(in srgb,var(--accent) 45%,transparent); border-radius:50%; display:grid; grid-template-columns:repeat(3,1fr); gap:14px; align-items:center; padding:45px; position:relative; }
-.agent-ring::before { content:"ORCHESTRATION"; position:absolute; inset:50% auto auto 50%; transform:translate(-50%,-50%); color:var(--accent); font:500 11px "IBM Plex Mono",monospace; }
+.agent-ring::before { content:"调度"; position:absolute; inset:50% auto auto 50%; transform:translate(-50%,-50%); color:var(--accent); font:500 12px "IBM Plex Mono",monospace; letter-spacing:.18em; }
 .agent-ring span { border:1px solid var(--line); background:var(--bg); padding:12px; text-align:center; font:500 12px "IBM Plex Mono",monospace; }
 
 .value-matrix { display:grid; grid-template-columns:40px 1fr 1fr; grid-template-rows:1fr 1fr 30px; min-height:390px; }
@@ -253,6 +253,12 @@ ul.clean li::before { content:""; width:7px; height:7px; background:var(--accent
 .career-paths { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
 .career-paths > div { border:1px solid var(--line); padding:clamp(24px,3vw,42px); background:rgba(255,255,255,.02); }
 .career-paths > div:first-child { border-top:2px solid var(--accent); }.career-paths > div:last-child { border-bottom:2px solid var(--accent); }
+
+.future-questions { display:grid; gap:15px; counter-reset:future; }
+.future-questions p { counter-increment:future; position:relative; margin:0; padding:17px 24px 17px 72px; border:1px solid var(--line); background:linear-gradient(100deg,color-mix(in srgb,var(--accent) 8%,transparent),transparent 70%); color:#e7ebf1; font-size:clamp(20px,2.05vw,32px); line-height:1.46; }
+.future-questions p::before { content:"0" counter(future); position:absolute; left:22px; top:20px; color:var(--accent); font:500 12px "IBM Plex Mono",monospace; letter-spacing:.1em; }
+.future-questions-final p:last-child { border-color:var(--accent); background:linear-gradient(105deg,color-mix(in srgb,var(--accent) 17%,transparent),color-mix(in srgb,var(--accent) 3%,transparent)); color:#fff; font-weight:650; }
+.future-questions-final p:last-child::after { content:""; position:absolute; left:72px; bottom:10px; width:110px; height:2px; background:var(--accent); box-shadow:34px 0 color-mix(in srgb,var(--accent) 45%,transparent),68px 0 color-mix(in srgb,var(--accent) 18%,transparent); }
 
 .horizon-roadmap { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
 .horizon-roadmap > div { border:1px solid var(--line); min-height:300px; padding:30px; background:linear-gradient(145deg,color-mix(in srgb,var(--accent) 7%,transparent),transparent); }

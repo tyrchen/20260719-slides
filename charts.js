@@ -143,15 +143,15 @@
     svg.append('line').attr('x1',x(50)).attr('x2',x(50)).attr('y1',m.t).attr('y2',380-m.b).attr('stroke',c.line);
     svg.append('line').attr('x1',m.l).attr('x2',1100-m.r).attr('y1',y(50)).attr('y2',y(50)).attr('stroke',c.line);
     [
-      ['需要工具化',8,95,'start'],['高价值杠杆',92,95,'end'],
-      ['快速商品化',8,5,'start'],['优先自动化',92,5,'end']
+      ['先借助工具',8,95,'start'],['值得长期投入',92,95,'end'],
+      ['容易被替代',8,5,'start'],['优先自动化',92,5,'end']
     ].forEach(([t,px,py,anchor])=>svg.append('text').attr('x',x(px)).attr('y',y(py)).attr('text-anchor',anchor).attr('fill',c.accent).attr('fill-opacity',.68).attr('font-size',22).attr('font-weight',700).text(t));
     const g=svg.append('g').selectAll('g').data(data).join('g').attr('transform',`translate(${x(50)},${y(50)})`).attr('opacity',0);
     g.append('circle').attr('r',d=>d.r).attr('fill',d=>d.y>50?c.accent:'#657087').attr('fill-opacity',d=>d.y>50?.18:.12).attr('stroke',d=>d.y>50?c.accent:'#778293');
     g.append('text').attr('text-anchor','middle').attr('dominant-baseline','middle').attr('fill',c.text).attr('font-size',13).attr('font-weight',550).text(d=>d.name);
     g.transition().duration(750).delay((d,i)=>i*70).attr('transform',d=>`translate(${x(d.x)},${y(d.y)})`).attr('opacity',1);
     svg.append('text').attr('x',(m.l+1100-m.r)/2).attr('y',371).attr('text-anchor','middle').attr('fill',c.muted).attr('font-size',14).text('可验证性 →');
-    svg.append('text').attr('transform','rotate(-90)').attr('x',-(m.t+380-m.b)/2).attr('y',20).attr('text-anchor','middle').attr('fill',c.muted).attr('font-size',14).text('判断强度 →');
+    svg.append('text').attr('transform','rotate(-90)').attr('x',-(m.t+380-m.b)/2).attr('y',20).attr('text-anchor','middle').attr('fill',c.muted).attr('font-size',14).text('需要多少判断 →');
   }
 
   function roadmap(el) {
@@ -159,7 +159,7 @@
     const data=[
       {day:'30',title:'建立一个闭环',lines:['选择真实重复任务','写清上下文与验收条件','补上回归测试'],x:170,y:225},
       {day:'90',title:'交付端到端项目',lines:['让 Agent 跨越多个阶段','记录失败与修正','沉淀规则和工作流程'],x:550,y:145},
-      {day:'365',title:'形成职业杠杆',lines:['建立领域资产与方法','管理人和 Agent 协作','对复杂结果负责'],x:930,y:72}
+      {day:'365',title:'形成长期能力',lines:['建立领域资产与方法','管理人和 Agent 协作','对复杂结果负责'],x:930,y:72}
     ];
     const path=d3.path(); path.moveTo(data[0].x,data[0].y); path.bezierCurveTo(350,225,380,145,data[1].x,data[1].y); path.bezierCurveTo(730,145,770,72,data[2].x,data[2].y);
     const line=svg.append('path').attr('d',path.toString()).attr('fill','none').attr('stroke',c.accent).attr('stroke-width',3);
@@ -171,7 +171,7 @@
     nodes.each(function(d){ multiline(d3.select(this),d.lines,0,87,21).attr('text-anchor','middle').attr('fill',c.muted).attr('font-size',13); });
     nodes.transition().duration(500).delay((d,i)=>300+i*350).attr('opacity',1);
     svg.append('text').attr('x',170).attr('y',32).attr('fill',c.muted).attr('font-size',13).text('从一个可复现任务开始');
-    svg.append('text').attr('x',930).attr('y',337).attr('text-anchor','end').attr('fill',c.muted).attr('font-size',13).text('把工具熟练度变成长期领域资产');
+    svg.append('text').attr('x',930).attr('y',337).attr('text-anchor','end').attr('fill',c.muted).attr('font-size',13).text('从会用工具，走向真正理解一个领域');
   }
 
   function productLoop(el) {
@@ -258,10 +258,10 @@
     report.append('text').attr('x',77).attr('y',67).attr('fill',c.muted).attr('font-size',11).text('爆发力');
     const px=d3.scaleLinear().domain([40,90]).range([16,142]);
     report.append('line').attr('x1',16).attr('x2',142).attr('y1',116).attr('y2',116).attr('stroke',c.line).attr('stroke-width',5);
-    [50,75].forEach((v,i)=>{ report.append('circle').attr('cx',px(v)).attr('cy',116).attr('r',5).attr('fill',i?palette.insight:c.muted); report.append('text').attr('x',px(v)).attr('y',139).attr('text-anchor','middle').attr('fill',c.muted).attr('font-size',10).text(`${v}th`); });
+    [50,75].forEach((v,i)=>{ report.append('circle').attr('cx',px(v)).attr('cy',116).attr('r',5).attr('fill',i?palette.insight:c.muted); report.append('text').attr('x',px(v)).attr('y',139).attr('text-anchor','middle').attr('fill',c.muted).attr('font-size',10).text(`${v}%`); });
     report.append('path').attr('d',`M${px(68)-6},102 L${px(68)+6},102 L${px(68)},112 Z`).attr('fill',palette.edge);
     report.append('text').attr('x',px(68)).attr('y',92).attr('text-anchor','middle').attr('fill',palette.edge).attr('font-size',10).attr('font-weight',650).text('你');
-    report.append('text').attr('x',16).attr('y',172).attr('fill',c.text).attr('font-size',12).attr('font-weight',650).text('距 75th：7 个百分点');
+    report.append('text').attr('x',16).attr('y',172).attr('fill',c.text).attr('font-size',12).attr('font-weight',650).text('距前 25%：7 个百分点');
     report.append('text').attr('x',16).attr('y',196).attr('fill',c.muted).attr('font-size',10).text('建议：提升短距离启动训练');
     report.append('rect').attr('x',16).attr('y',211).attr('width',126).attr('height',12).attr('rx',6).attr('fill',palette.insight).attr('fill-opacity',.16);
     report.append('rect').attr('x',16).attr('y',211).attr('width',82).attr('height',12).attr('rx',6).attr('fill',palette.insight).attr('fill-opacity',.7);
