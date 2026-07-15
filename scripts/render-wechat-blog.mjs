@@ -56,7 +56,6 @@ const renderMarkdown = (markdown) => {
   const lines = markdown.replaceAll('\r\n', '\n').split('\n');
   const output = [];
   let title = '文章';
-  let sectionNumber = 0;
 
   for (let index = 0; index < lines.length;) {
     const raw = lines[index].trim();
@@ -74,9 +73,7 @@ const renderMarkdown = (markdown) => {
           <p style="margin:20px 0 0;padding-top:18px;border-top:1px solid rgba(255,255,255,.18);color:#c9d8f4;font-size:14px;line-height:1.7;">从软件、可穿戴设备、技术写作到工程师的未来</p>
         </header>`);
       } else {
-        sectionNumber += 1;
         output.push(`<section style="margin:48px 0 24px;">
-          <p style="margin:0 0 8px;color:${colors.accent};font-size:12px;line-height:1.4;font-weight:750;letter-spacing:.15em;">${String(sectionNumber).padStart(2, '0')} · 核心话题</p>
           <h2 style="margin:0;padding-bottom:13px;border-bottom:2px solid ${colors.accent};color:${colors.ink};font-size:25px;line-height:1.45;font-weight:800;letter-spacing:-.015em;">${inline(text)}</h2>
         </section>`);
       }
