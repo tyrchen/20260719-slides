@@ -115,6 +115,80 @@
     core.transition().duration(700).attr('opacity',1);
   }
 
+  function flywheel(el) {
+    const c=colors(), svg=svgFor(el,1100,350), cx=220, cy=164, radius=112;
+    const palette={software:'#6b8cff',hardware:'#b9f46c',knowledge:'#ffad66'};
+    const defs=svg.append('defs');
+    defs.append('marker').attr('id','flywheel-arrow').attr('viewBox','0 0 10 10').attr('refX',8).attr('refY',5)
+      .attr('markerWidth',6).attr('markerHeight',6).attr('orient','auto')
+      .append('path').attr('d','M0 0 L10 5 L0 10 Z').attr('fill',c.accent);
+    const glow=defs.append('filter').attr('id','flywheel-glow');
+    glow.append('feGaussianBlur').attr('stdDeviation',2.5).attr('result','blur');
+
+    const points=[
+      {label:'构建',sub:'把想法做出来',angle:-Math.PI/2},
+      {label:'衡量',sub:'让现实给证据',angle:Math.PI/6},
+      {label:'学习',sub:'把结果写回系统',angle:Math.PI*5/6}
+    ].map(d=>({...d,x:cx+Math.cos(d.angle)*radius,y:cy+Math.sin(d.angle)*radius}));
+
+    svg.append('circle').attr('cx',cx).attr('cy',cy).attr('r',radius).attr('fill','none')
+      .attr('stroke',c.accent).attr('stroke-opacity',.14).attr('stroke-width',18);
+    const arcPaths=points.map((point,i)=>{
+      const next=points[(i+1)%points.length];
+      return svg.append('path').attr('d',`M${point.x},${point.y} A${radius},${radius} 0 0 1 ${next.x},${next.y}`)
+        .attr('fill','none').attr('stroke',c.accent).attr('stroke-width',3).attr('stroke-opacity',.75)
+        .attr('marker-end','url(#flywheel-arrow)').node();
+    });
+
+    const core=svg.append('g').attr('transform',`translate(${cx},${cy})`);
+    core.append('circle').attr('r',66).attr('fill',c.accent).attr('fill-opacity',.1).attr('stroke',c.accent).attr('stroke-width',2);
+    core.append('circle').attr('r',50).attr('fill',c.bg).attr('stroke',c.accent).attr('stroke-opacity',.35);
+    core.append('text').attr('text-anchor','middle').attr('y',-5).attr('fill',c.accent).attr('font-size',22).attr('font-weight',750).text('AI 加速');
+    core.append('text').attr('text-anchor','middle').attr('y',20).attr('fill',c.muted).attr('font-size',10).text('上下文 · 自动化 · 反馈');
+
+    const nodes=svg.append('g').selectAll('g').data(points).join('g').attr('transform',d=>`translate(${d.x},${d.y})`);
+    nodes.append('circle').attr('r',41).attr('fill',c.bg).attr('stroke',c.accent).attr('stroke-width',2);
+    nodes.append('text').attr('text-anchor','middle').attr('y',-3).attr('fill',c.text).attr('font-size',18).attr('font-weight',700).text(d=>d.label);
+    nodes.append('text').attr('text-anchor','middle').attr('y',16).attr('fill',c.muted).attr('font-size',9).text(d=>d.sub);
+    svg.append('text').attr('x',cx).attr('y',337).attr('text-anchor','middle').attr('fill',c.muted).attr('font-size',12).text('每转一轮，速度更快，证据更多');
+
+    const cases=[
+      {id:'01',name:'Rustack',color:palette.software,steps:['构建协议','兼容测试','补齐语义']},
+      {id:'02',name:'可穿戴设备',color:palette.hardware,steps:['做出原型','现场测量','修正设计']},
+      {id:'03',name:'技术书',color:palette.knowledge,steps:['生成章节','来源审稿','重写结构']}
+    ];
+    const rows=svg.append('g').attr('transform','translate(420,30)').selectAll('g.case').data(cases).join('g').attr('class','case').attr('transform',(d,i)=>`translate(0,${i*101})`);
+    rows.append('rect').attr('width',650).attr('height',82).attr('rx',3).attr('fill',d=>d.color).attr('fill-opacity',.045).attr('stroke',d=>d.color).attr('stroke-opacity',.36);
+    rows.append('rect').attr('width',4).attr('height',82).attr('fill',d=>d.color);
+    rows.append('text').attr('x',22).attr('y',27).attr('fill',d=>d.color).attr('font-size',10).attr('font-weight',650).text(d=>d.id);
+    rows.append('text').attr('x',22).attr('y',55).attr('fill',c.text).attr('font-size',16).attr('font-weight',700).text(d=>d.name);
+    rows.each(function(d){
+      const row=d3.select(this), start=160, gap=152;
+      d.steps.forEach((step,i)=>{
+        row.append('rect').attr('x',start+i*gap).attr('y',21).attr('width',116).attr('height',40).attr('rx',20).attr('fill',d.color).attr('fill-opacity',.1).attr('stroke',d.color).attr('stroke-opacity',.5);
+        row.append('text').attr('x',start+58+i*gap).attr('y',46).attr('text-anchor','middle').attr('fill',c.text).attr('font-size',13).text(step);
+        if(i<2) row.append('text').attr('x',start+132+i*gap).attr('y',47).attr('text-anchor','middle').attr('fill',d.color).attr('font-size',18).text('→');
+      });
+      row.append('text').attr('x',626).attr('y',50).attr('text-anchor','middle').attr('fill',d.color).attr('font-size',21).text('↺');
+    });
+
+    const ring=svg.append('path').attr('d',`M${cx},${cy-radius} A${radius},${radius} 0 1 1 ${cx-.1},${cy-radius}`)
+      .attr('fill','none').attr('stroke','transparent').node();
+    const ringLength=ring.getTotalLength();
+    const loopParticle=(delay=0)=>{
+      const particle=svg.append('circle').attr('r',4).attr('fill',c.accent).attr('opacity',0).attr('filter','url(#flywheel-glow)');
+      const run=()=>{
+        const slide=el.closest('.slide');
+        if(!particle.node()?.isConnected || !slide?.classList.contains('active')) { particle.interrupt().attr('opacity',0); return; }
+        particle.attr('opacity',0).transition().delay(delay).duration(1500).ease(d3.easeLinear).attr('opacity',1)
+          .attrTween('transform',()=>t=>{const p=ring.getPointAtLength(t*ringLength);return `translate(${p.x},${p.y})`;})
+          .transition().duration(120).attr('opacity',0).on('end',run);
+      };
+      run();
+    };
+    d3.range(5).forEach(i=>loopParticle(i*310));
+  }
+
   function lifecycle(el) {
     const c=colors(), svg=svgFor(el,1100,360), margin={l:70,r:35,t:42,b:62}, stages=['需求','设计','实现','验证','运行'];
     const human=[92,86,46,82,88], automation=[30,55,93,67,38];
@@ -287,7 +361,7 @@
     loopParticle(feedback.node(),palette.insight,350,2100,5);
   }
 
-  const renderers={factors,evolution,compatibility,system,lifecycle,value,roadmap,productLoop};
+  const renderers={factors,evolution,compatibility,system,flywheel,lifecycle,value,roadmap,productLoop};
   window.renderD3Chart = el => { const fn=renderers[el.dataset.chart]; if(fn && window.d3) fn(el); };
   window.renderChartsInSlide = slide => slide?.querySelectorAll('[data-chart]').forEach(window.renderD3Chart);
 })();

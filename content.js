@@ -16,7 +16,7 @@ const quotation = (text, note) => `<blockquote class="quote"><span class="quote-
 
 const slides = [
   // 01–06 开场
-  S('开场', '把 AI 变成<br><span class="accent">工程团队</span>', `<p class="lead">从 Rust 云服务、可穿戴设备、500 页技术书<br>到 AI 时代的工程师</p>${chip(['AI NATIVE ENGINEERING','4 TOPICS','80 SLIDES'])}`, {type:'cover', kicker:'AI NATIVE ENGINEERING · 2026', visual:VISUALS.hero}),
+  S('开场', '把 AI 变成<br><span class="accent">工程团队</span>', `<p class="lead">从 Rust 云服务、可穿戴设备、500 页技术书<br>到 AI 时代的工程师</p>${chip(['AI NATIVE ENGINEERING','4 TOPICS','81 SLIDES'])}`, {type:'cover', kicker:'AI NATIVE ENGINEERING · 2026', visual:VISUALS.hero}),
   S('开场', '今天不讲<br>“如何用 AI 写代码”', `<div class="compare"><div class="compare-side negative"><span class="eyebrow">临时性</span><h3>Prompt 技巧合集</h3><p>一次对话、一次生成；效果依赖当时的上下文与运气，同样的错误还会再犯。</p></div><div class="versus">转变</div><div class="compare-side highlight"><span class="eyebrow">可持续性</span><h3>工程系统</h3><p>规则写进仓库，任务有完成标准，失败会自动暴露；修过的问题不必一再重来。</p></div></div>${evidence('判断标准','关掉当前对话后，下一位 Agent 是否仍然知道怎么正确地继续工作？')}`),
   S('开场', '三个产物，<br>三个工程世界', `<div class="case-landscape"><div><span class="case-id">01 · 软件</span><h3>Rustack</h3><b>协议广度与兼容性</b><i>↓</i><strong>测试 · 兼容套件 · 性能基准</strong></div><div><span class="case-id">02 · 软硬件</span><h3>可穿戴设备</h3><b>功耗、无线与端云协同</b><i>↓</i><strong>仪器 · 实物 · 现场数据</strong></div><div><span class="case-id">03 · 知识</span><h3>技术书</h3><b>事实、结构与长期一致性</b><i>↓</i><strong>来源 · 审稿 · 读者理解</strong></div></div>`, {kicker:'THE ENGINEERING LANDSCAPE'}),
   S('开场', '这些东西是 AI<br>“生成”出来的吗？', quotation('<em>不是。</em> AI 写出了大量代码和文字；项目之所以成立，是因为背后有一套<strong>能持续运转的工程闭环</strong>。','代码和文字只是产物，能够反复交付的才是系统。'), {kicker:'THE QUESTION'}),
@@ -115,9 +115,10 @@ const slides = [
   ],4)),
   S('统一方法论', '十条原则 · 01—05', `<div class="grid-2"><div>${list(['把重要上下文写进仓库','先定义成功与非目标','以端到端纵向切片推进','先写验收条件，再生成实现','用确定性工具约束概率性模型'])}</div><div class="card"><span class="eyebrow">共同结构</span><h3>上下文 → 契约 → 反馈</h3><p>系统是否稳定，不能只看模型有多强。</p></div></div>`, {kicker:'PRINCIPLES'}),
   S('统一方法论', '十条原则 · 06—10', `<div class="grid-2"><div>${list(['研究、设计、实现和审查由不同角色承担','AI 负责铺开，人负责方向与质量','软件靠测试，硬件靠测量，写作靠来源','把每次修正写进规格、工作方法、测试或规则','AI 会放大工程纪律带来的差距'])}</div><div class="card"><span class="eyebrow">越用越值钱的资产</span><h3>不是某一次提示词</h3><p>而是项目里不断积累的工程记忆。</p></div></div>`, {kicker:'PRINCIPLES'}),
+  S('统一方法论', 'AI 让构建—衡量—学习飞快转起来', `<div class="d3-chart d3-flywheel" data-chart="flywheel" aria-label="AI 加速构建、衡量、学习飞轮，并串联软件、硬件和知识三个项目"></div>${evidence('持续优势','谁能用 AI 加快软件、硬件和知识生产的每一次循环，谁就能更快试错、更早学会，也更容易建立持续优势。')}`, {kicker:'BUILD · MEASURE · LEARN'}),
 
   // 话题四：AI 时代的软件开发与职业规划
-  S('转场', '当 AI 能独立执行任务，工程师还负责什么？', `<p class="lead">前三个案例讲的是怎样和 AI 一起交付。接下来要问：当这种能力越来越普遍，团队怎么分工，个人又该把时间花在哪里？</p>${chip(['交付 → 方向','产出 → 结果','工具 → 能力'])}`, {type:'cover', transition:true, kicker:'FROM METHOD TO CAREER', visual:VISUALS.systemToCareer}),
+  S('转场', '当飞轮越转越快，工程师还负责什么？', `<p class="lead">AI 可以加快每一轮构建、衡量和学习。接下来要问：当这种速度成为常态，团队怎么分工，个人又该把时间花在哪里？</p>${chip(['交付 → 方向','产出 → 结果','工具 → 能力'])}`, {type:'cover', transition:true, kicker:'FROM METHOD TO CAREER', visual:VISUALS.systemToCareer}),
   S('话题四 · 下一站：工程师的未来', '04<br><span class="accent">下一站：工程师的未来</span>', `<p class="lead">AI 改变的不只是编码速度，也会改变我们怎样衡量产出、怎样组织团队，以及工程师靠什么建立长期价值。</p>${chip(['SOFTWARE','TEAM','CAREER','RESPONSIBILITY'])}`, {type:'cover', kicker:'TOPIC 04 · THE ENGINEER', visual:VISUALS.futureEngineer}),
   S('话题四 · 下一站：工程师的未来', '软件产出，该怎么衡量？', `<div class="production-shift"><div><span>过去</span><strong>代码行 / PR</strong><p>关心“写了多少、合了多少”。</p></div><i>→</i><div class="active"><span>接下来</span><strong>经过验证的新能力</strong><p>从需求、实现、测试一直到运行证据。</p></div></div>${evidence('看结果','别数 Agent 生成了多少文件，要看系统最后多了什么：能不能验证、能不能维护、能不能长期运行。')}`, {kicker:'UNIT OF PRODUCTION'}),
   S('话题四 · 下一站：工程师的未来', '开发不再是一条单向流水线', `<div class="d3-chart d3-lifecycle" data-chart="lifecycle" aria-label="AI 时代开发生命周期注意力变化"></div><p class="chart-caption">实现会越来越快，更多工程注意力将回到问题定义、验证和运行中的真实反馈。</p>`, {kicker:'LIFECYCLE SHIFT'}),

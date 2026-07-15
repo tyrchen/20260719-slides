@@ -215,6 +215,7 @@ ul.clean li::before { content:""; width:7px; height:7px; background:var(--accent
 .d3-split { display:grid; grid-template-columns:minmax(420px,.85fr) minmax(0,1.15fr); gap:clamp(30px,5vw,80px); align-items:center; }
 .d3-compatibility { height:310px; }
 .d3-system { height:360px; }
+.d3-flywheel { height:350px; }
 .d3-product-loop { height:430px; }
 .d3-lifecycle { height:360px; }
 .d3-value { height:380px; }
