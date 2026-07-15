@@ -14,7 +14,7 @@ let touchStartX = 0;
 const sectionColors = {
   '开场':'#59e3ff', '话题一 · Rustack':'#6b8cff', '转场':'#b9f46c',
   '话题二 · 可穿戴':'#b9f46c', '话题三 · AI 写书':'#ffad66',
-  '统一方法论':'#ff79b7', '结束':'#59e3ff'
+  '统一方法论':'#ff79b7', '话题四 · 下一站：工程师':'#c792ff', '结束':'#59e3ff'
 };
 
 const navigationTargets = [
@@ -22,14 +22,15 @@ const navigationTargets = [
   {name:'Rustack', section:'话题一 · Rustack'},
   {name:'可穿戴', section:'话题二 · 可穿戴'},
   {name:'AI 写书', section:'话题三 · AI 写书'},
-  {name:'方法论', section:'统一方法论'}
+  {name:'方法论', section:'统一方法论'},
+  {name:'工程师', section:'话题四 · 下一站：工程师'}
 ].map(item => ({...item, target:deckSlides.findIndex(slide => slide.section === item.section)}));
 
 function renderSlides() {
   totalPages.textContent = deckSlides.length;
   deckSlides.forEach((s,i) => {
     const el = document.createElement('section');
-    el.className = `slide ${s.type === 'cover' ? 'slide-cover' : ''} ${s.visual ? 'has-visual' : ''} ${s.transition ? 'slide-transition' : ''}`;
+    el.className = `slide ${s.type === 'cover' ? 'slide-cover' : ''} ${s.type === 'demo' ? 'slide-demo' : ''} ${s.visual ? 'has-visual' : ''} ${s.transition ? 'slide-transition' : ''}`;
     el.dataset.index = i;
     el.innerHTML = `<div class="slide-inner"><div class="content"><span class="eyebrow">${s.kicker || s.section}</span><h2>${s.title}</h2>${s.content}</div>${s.visual ? `<div class="slide-visual" aria-hidden="true">${s.visual}</div>` : ''}</div>`;
     stage.appendChild(el);

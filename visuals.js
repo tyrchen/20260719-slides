@@ -85,4 +85,24 @@ const converge = visualFrame(`
     <g fill="currentColor" stroke="none" font-family="monospace" font-size="14" text-anchor="middle"><text x="78" y="15">SOFTWARE</text><text x="412" y="15">HARDWARE</text><text x="245" y="533">KNOWLEDGE</text></g>
   </g>`);
 
-window.VISUALS = { hero, rustack, wearable, book, softwareToHardware, hardwareToKnowledge, converge };
+const systemToCareer = visualFrame(`
+  <g transform="translate(72 84)" fill="none" stroke="currentColor">
+    <circle cx="118" cy="170" r="84" fill="url(#panel)"/><circle cx="118" cy="170" r="16" fill="currentColor"/>
+    <circle cx="118" cy="170" r="52" stroke-dasharray="4 9"/><path d="M202 170h112" stroke-width="2"/><path d="m301 157 16 13-16 13"/>
+    <g transform="translate(355 45)"><circle cx="98" cy="67" r="43" fill="url(#panel)"/><path d="M42 231c0-67 25-112 56-112s56 45 56 112" fill="url(#panel)"/><path d="M98 119v112M42 231h112"/></g>
+    <g stroke-opacity=".45"><path d="M36 98 0 62M200 98l36-36M36 242 0 278M200 242l36 36"/><circle cx="0" cy="62" r="8" fill="currentColor"/><circle cx="236" cy="62" r="8" fill="currentColor"/><circle cx="0" cy="278" r="8" fill="currentColor"/><circle cx="236" cy="278" r="8" fill="currentColor"/></g>
+    <path d="M488 112h88M488 147h60M488 182h102" stroke-opacity=".35"/>
+    <g fill="currentColor" stroke="none" font-family="monospace" font-size="14"><text x="39" y="18">ENGINEERING SYSTEM</text><text x="391" y="18">HUMAN JUDGMENT</text><text x="145" y="414">SYSTEM CAPABILITY → CAREER LEVERAGE</text></g>
+  </g>`);
+
+const futureEngineer = visualFrame(`
+  <g transform="translate(62 74)" fill="none" stroke="currentColor">
+    <path d="M0 421h555M52 421V84" stroke-opacity=".25"/>
+    <path d="M52 351c91-10 130-38 184-86s109-90 178-101 101-51 141-119" stroke-width="3"/>
+    <path d="M52 390c125-4 202-17 270-55s137-74 233-78" stroke-dasharray="6 10" stroke-opacity=".55"/>
+    <g fill="currentColor" stroke="none"><circle cx="52" cy="351" r="8"/><circle cx="236" cy="265" r="8"/><circle cx="414" cy="164" r="8"/><circle cx="555" cy="45" r="8"/></g>
+    <g font-family="monospace" font-size="14" fill="currentColor" stroke="none"><text x="66" y="378">CODE</text><text x="201" y="245">SYSTEM</text><text x="377" y="143">JUDGMENT</text><text x="472" y="24">LEVERAGE</text><text x="270" y="478">TIME →</text></g>
+    <rect x="332" y="286" width="204" height="91" fill="#080b12"/><text x="352" y="320" font-family="monospace" font-size="13" fill="currentColor" stroke="none">AI AMPLIFIES</text><text x="352" y="348" font-family="monospace" font-size="13" fill="currentColor" stroke="none">WHAT YOU CAN VERIFY</text>
+  </g>`);
+
+window.VISUALS = { hero, rustack, wearable, book, softwareToHardware, hardwareToKnowledge, converge, systemToCareer, futureEngineer };

@@ -15,7 +15,7 @@ const evidence = (label, text) => `<div class="evidence"><span>${label}</span><p
 
 const slides = [
   // 01–06 开场
-  S('开场', '把 AI 变成<br><span class="accent">工程团队</span>', `<p class="lead">从 Rust 云服务、可穿戴设备<br>到 500 页技术书</p>${chip(['AI NATIVE ENGINEERING','3 TOPICS','≈60 SLIDES'])}`, {type:'cover', kicker:'AI NATIVE ENGINEERING · 2026', visual:VISUALS.hero}),
+  S('开场', '把 AI 变成<br><span class="accent">工程团队</span>', `<p class="lead">从 Rust 云服务、可穿戴设备、500 页技术书<br>到 AI 时代的工程师</p>${chip(['AI NATIVE ENGINEERING','4 TOPICS','75 SLIDES'])}`, {type:'cover', kicker:'AI NATIVE ENGINEERING · 2026', visual:VISUALS.hero}),
   S('开场', '今天不讲<br>“如何用 AI 写代码”', `<div class="compare"><div class="compare-side"><span class="eyebrow">NOT THIS</span><h3>Prompt 技巧合集</h3><p>一次对话、一次生成；效果依赖当时的上下文与运气，错误不会自动沉淀。</p></div><div class="versus">SHIFT</div><div class="compare-side highlight"><span class="eyebrow">THIS</span><h3>可持续工程系统</h3><p>规则进入仓库，任务有退出标准，失败能被机器读取，修正成为下一次执行的默认能力。</p></div></div>${evidence('判断标准','关掉当前对话后，下一位 Agent 是否仍然知道怎么正确地继续工作？')}`),
   S('开场', '三个产物，<br>三个工程世界', cards([
     ['Rustack','约 8 MB、本地启动不到 1 秒的 AWS 模拟器'],
@@ -45,7 +45,7 @@ const slides = [
   S('话题一 · Rustack', '不要让同一个 Agent<br>包办所有角色', `<div class="grid-3"><div class="card compact"><h3>Research</h3><p>收集事实与未知</p></div><div class="card compact"><h3>Spec</h3><p>约束边界与设计</p></div><div class="card compact"><h3>Implementation</h3><p>按依赖实现</p></div><div class="card compact"><h3>Test</h3><p>构造失败信号</p></div><div class="card compact"><h3>Reviewer</h3><p>独立检查产物</p></div><div class="card compact"><h3>Human</h3><p>方向与最终责任</p></div></div>`, {kicker:'SEPARATION OF CONCERNS'}),
   S('话题一 · Rustack', '外部测试，是最好的<br>AI 教师', `<div class="metric-layout"><div><div class="metric-change"><span>40</span><i>→</i><span>80<sup>%+</sup></span></div><p>Alternator 测试把“看起来能用”拆成数百个具体语义差距。</p></div><div>${list(['表达式：优先级、保留字、Nested path','数值：十进制精度与比较语义','响应：ReturnValues 与分页边界','约束：1 MB 限制与 Validation 顺序'])}</div></div>${evidence('关键变化','Agent 不再猜“DynamoDB 应该怎样”，而是针对可复现的失败补齐最小语义。')}`, {kicker:'MACHINE-READABLE FEEDBACK'}),
   S('话题一 · Rustack', 'AI 不怕测试失败', `<p class="quote">AI 怕的是没有高质量、机器可读的失败信号。</p><div class="formula" style="margin-top:36px">失败测试 → 定位协议语义 → 小范围修改 → 回归验证</div>`, {kicker:'THE REAL FEEDBACK LOOP'}),
-  S('话题一 · Rustack', '现场 Demo：<br>展示修复，不展示魔术', `<div class="grid-2"><div>${list(['启动固定版本 Rustack','CLI 操作 S3','SDK 操作 DynamoDB','触发一个已有失败测试'])}</div><div class="card"><span class="eyebrow">6–8 MIN</span><h3>失败 → 定位 → 修改 → 通过</h3><p>边界清楚、结果可验证、随机性可控。</p></div></div>`, {kicker:'DEMO DESIGN'}),
+  S('话题一 · Rustack', 'DEMO', ``, {type:'demo', kicker:'LIVE'}),
   S('话题一 · Rustack', 'Rustack 的复利资产', cards([
     ['规则','把工程品味写进仓库。'],
     ['Specs','让设计可执行、可审查。'],
@@ -77,7 +77,7 @@ const slides = [
   S('话题二 · 可穿戴', '失败模式 ①<br>功耗计算过于乐观', `<div class="grid-2"><div class="stat"><strong>AVG ≠ REAL</strong><span>Datasheet 平均值不能直接相加</span></div><div>${list(['无线发射峰值与重传','Sensor startup / Flash 写入','DC/DC 效率与 CPU 活跃比例','低温、电池老化与容量衰减'])}</div></div>`, {kicker:'POWER'}),
   S('话题二 · 可穿戴', '失败模式 ②<br>无线与传感器被抽象掉', `<div class="grid-2"><div class="card"><span class="eyebrow">RF</span><h3>标称距离不是现场距离</h3><p>鞋内空间、人体遮挡、多人运动、天线方向。</p></div><div class="card"><span class="eyebrow">IMU</span><h3>看起来像数据，不等于可信</h3><p>偏置、噪声、温漂、安装差异、时钟漂移。</p></div></div>`),
   S('话题二 · 可穿戴', '失败模式 ③<br>虚构供应链确定性', `<p class="quote">型号、价格、库存、封装、认证状态，都必须实时核实。</p>${chip(['BOM SNAPSHOT','SECOND SOURCE','LIFECYCLE','CERTIFICATION','LEAD TIME'])}`, {kicker:'SUPPLY CHAIN'}),
-  S('话题二 · 可穿戴', '现场 Demo：<br>一个最小纵向切片', `${flow(['模拟 / 真实 IMU','Rust Packet','iPhone / Laptop','实时波形','上传云端','Session 结果'])}<div class="card compact" style="margin-top:32px"><b class="accent">备用路径：</b> 真实设备 + 模拟数据 + 录屏，三条路径都准备。</div>`, {kicker:'DEMO DESIGN'}),
+  S('话题二 · 可穿戴', 'DEMO', ``, {type:'demo', kicker:'LIVE'}),
   S('话题二 · 可穿戴', '物理世界是<br>最终测试套件', `<div class="huge-number">MEASURE</div><p class="lead">AI 可以压缩学习时间，但不能替代测量、实验与现场验证。</p>`, {type:'cover', kicker:'TOPIC 02 · CONCLUSION'}),
 
   // 40 转场
@@ -101,6 +101,7 @@ const slides = [
   S('话题三 · AI 写书', '生成式图片<br>不负责技术准确性', `<div class="compare"><div class="compare-side highlight"><span class="eyebrow">CODE / SVG</span><h3>准确性图形</h3><p>数据图、坐标图、流程图；保留生成脚本。</p></div><div class="versus">ROLE</div><div class="compare-side"><span class="eyebrow">GENERATIVE IMAGE</span><h3>叙事性图形</h3><p>封面、插画、氛围；必须进行视觉 Review。</p></div></div>`),
   S('话题三 · AI 写书', '把排版与发布<br>也工程化', `${flow(['Markdown / DSL','bukit','Typst','PDF','Git tag','GitHub Actions','Release'])}<div class="chips">${['可重复构建','版本化','可 Diff','自动发布','多格式'].map(x=>`<span class="chip">${x}</span>`).join('')}</div>`, {kicker:'PUBLISHING PIPELINE'}),
   S('话题三 · AI 写书', 'AI 写书的真实成本', `<div class="grid-4"><div class="stat"><strong>400–500</strong><span>页 / 本</span></div><div class="stat"><strong>25h+</strong><span>Agent 工作</span></div><div class="stat"><strong>40–50%</strong><span>周额度</span></div><div class="stat"><strong>5–10h</strong><span>人工审校</span></div></div><p class="lead" style="margin-top:46px">不是一键生成，而是把数月重复劳动压缩为高密度的工程流程。</p>`, {kicker:'REALITY CHECK'}),
+  S('话题三 · AI 写书', 'DEMO', ``, {type:'demo', kicker:'LIVE'}),
   S('话题三 · AI 写书', '知识系统的<br>最终验证者', `<div class="huge-number">TRUST</div><p class="lead">来源、审稿、读者理解与出版质量。</p>`, {type:'cover', kicker:'TOPIC 03 · CONCLUSION'}),
 
   // 统一方法论
@@ -116,6 +117,19 @@ const slides = [
   ],4)),
   S('统一方法论', '十条原则 · 01—05', `<div class="grid-2"><div>${list(['把重要上下文写进仓库','先定义成功与非目标','以端到端纵向切片推进','先写验收条件，再生成实现','用确定性工具包围概率性模型'])}</div><div class="card"><span class="eyebrow">THE PATTERN</span><h3>Context → Contract → Feedback</h3><p>工程系统的稳定性，来自模型之外。</p></div></div>`, {kicker:'PRINCIPLES'}),
   S('统一方法论', '十条原则 · 06—10', `<div class="grid-2"><div>${list(['研究、设计、实现、Review 分角色','AI 生成广度，人控制方向与质量','软件靠测试，硬件靠测量，写作靠来源','修正沉淀为 Spec、Skill、测试或规则','AI 会放大工程纪律的价值'])}</div><div class="card"><span class="eyebrow">THE COMPOUNDING ASSET</span><h3>不是某次 Prompt</h3><p>而是可以不断复用的工程记忆。</p></div></div>`, {kicker:'PRINCIPLES'}),
+
+  // 话题四：AI 时代的软件开发与职业规划
+  S('转场', '当系统可以执行，<br>工程师还负责什么？', `<p class="lead">前三个案例回答“怎样与 AI 一起交付”；下一个问题是：当这种能力成为基础设施，团队和个人应该怎样重新定位？</p>${chip(['DELIVERY → DIRECTION','OUTPUT → OUTCOME','TOOL → LEVERAGE'])}`, {type:'cover', transition:true, kicker:'FROM METHOD TO CAREER', visual:VISUALS.systemToCareer}),
+  S('话题四 · 下一站：工程师', '04<br><span class="accent">下一站：工程师</span>', `<p class="lead">AI 不只改变编码速度，它会重新定义软件的生产单位、团队边界，以及工程师的职业杠杆。</p>${chip(['SOFTWARE','TEAM','CAREER','RESPONSIBILITY'])}`, {type:'cover', kicker:'TOPIC 04 · THE ENGINEER', visual:VISUALS.futureEngineer}),
+  S('话题四 · 下一站：工程师', '软件的生产单位<br>正在改变', `<div class="production-shift"><div><span>过去</span><strong>代码行 / PR</strong><p>衡量“写了多少、合了多少”。</p></div><i>→</i><div class="active"><span>未来</span><strong>已验证的能力增量</strong><p>从需求、实现、测试到运行证据的完整闭环。</p></div></div>${evidence('真正的产出','不是 Agent 生成了多少文件，而是系统获得了多少可验证、可维护、可运营的新能力。')}`, {kicker:'UNIT OF PRODUCTION'}),
+  S('话题四 · 下一站：工程师', '开发生命周期<br>从流水线变成反馈网', `<div class="lifecycle-chart"><div><b>需求</b><span style="--v:35%"></span><small>人主导</small></div><div><b>设计</b><span style="--v:55%"></span><small>人机协作</small></div><div><b>实现</b><span style="--v:88%"></span><small>高度自动化</small></div><div><b>验证</b><span style="--v:68%"></span><small>工具 + 判断</small></div><div><b>运行</b><span style="--v:46%"></span><small>真实反馈</small></div></div><p class="lead" style="margin-top:30px">实现不再是最长阶段；定义、验证和运行反馈会占据更多工程注意力。</p>`, {kicker:'LIFECYCLE SHIFT'}),
+  S('话题四 · 下一站：工程师', '团队不会消失，<br>但拓扑会改变', `<div class="team-topology"><div class="human-node"><b>Human Lead</b><span>方向 · 取舍 · 责任</span></div><div class="agent-ring"><span>Research</span><span>Spec</span><span>Build</span><span>Test</span><span>Review</span><span>Operate</span></div><div class="feedback-node"><b>Reality</b><span>用户 · 测试 · 生产</span></div></div>${evidence('组织变化','少数人可以管理更宽的工程面，但前提是角色、权限、反馈和升级路径被清楚设计。')}`, {kicker:'TEAM TOPOLOGY'}),
+  S('话题四 · 下一站：工程师', '哪些工作被压缩，<br>哪些能力被放大？', `<div class="value-matrix"><div class="axis-y">判断强度 ↑</div><div class="q q1"><b>高价值杠杆</b><span>架构取舍</span><span>领域建模</span><span>验证设计</span></div><div class="q q2"><b>需要工具化</b><span>复杂调试</span><span>事故分析</span></div><div class="q q3"><b>优先自动化</b><span>模板代码</span><span>机械迁移</span><span>文档同步</span></div><div class="q q4"><b>快速商品化</b><span>孤立实现</span><span>无反馈生成</span></div><div class="axis-x">可验证性 →</div></div>`, {kicker:'VALUE MATRIX'}),
+  S('话题四 · 下一站：工程师', '未来工程师的<br>四层护城河', `<div class="moat-stack"><div style="--w:52%"><b>04 · 领导力与品味</b><span>决定什么值得做</span></div><div style="--w:66%"><b>03 · 验证与责任</b><span>知道怎样证明正确</span></div><div style="--w:80%"><b>02 · 系统与领域</b><span>理解约束和长期结构</span></div><div style="--w:94%"><b>01 · 工具与实现</b><span>熟练调用模型和自动化</span></div></div><p class="muted" style="margin-top:24px">工具层最容易获得，也最容易被复制；越向上，越依赖长期经验。</p>`, {kicker:'CAREER MOAT'}),
+  S('话题四 · 下一站：工程师', 'IC 与管理者，<br>都需要新的杠杆', `<div class="career-paths"><div><span class="eyebrow">INDIVIDUAL CONTRIBUTOR</span><h3>成为系统型 IC</h3>${list(['掌握一个真实领域','设计可执行的上下文','建立高强度验证工具','负责跨组件结果'])}</div><div><span class="eyebrow">ENGINEERING LEADER</span><h3>成为 AI 组织设计者</h3>${list(['划分人和 Agent 权限','设计任务与升级路径','管理质量、成本和风险','让团队经验持续沉淀'])}</div></div>`, {kicker:'TWO PATHS'}),
+  S('话题四 · 下一站：工程师', '一个可执行的<br>30 / 90 / 365 天计划', `<div class="horizon-roadmap"><div><strong>30</strong><b>天</b><p>选一个重复任务；建立上下文、验收条件和回归测试。</p></div><div><strong>90</strong><b>天</b><p>完成一个端到端项目；记录失败，把修正沉淀为规则和 Skill。</p></div><div><strong>365</strong><b>天</b><p>形成领域资产与个人方法；能够带领人和 Agent 交付复杂结果。</p></div></div>`, {kicker:'ACTION PLAN'}),
+  S('话题四 · 下一站：工程师', '不要把理解<br>外包给 AI', `<div class="grid-2"><div><p class="quote" style="font-size:clamp(28px,3.4vw,54px)">你可以委托实现，但不能委托责任。</p></div><div>${list(['能解释关键架构为何这样设计','能识别模型不知道什么','能在失败时接管和缩小问题','能为安全、成本和用户后果负责'])}</div></div>`, {kicker:'RESPONSIBILITY'}),
+  S('话题四 · 下一站：工程师', '不要和 AI 比<br>谁写得更快', `<p class="quote">去成为那个定义方向、设计系统、建立证据，并对结果负责的人。</p>${chip(['DIRECTION','SYSTEM','EVIDENCE','RESPONSIBILITY'])}`, {type:'cover', kicker:'TOPIC 04 · CONCLUSION'}),
   S('结束', 'AI 让实现变得廉价', `<p class="quote">定义问题、建立反馈和判断质量，正在成为工程师最昂贵的能力。</p><div class="chips" style="margin-top:50px"><span class="chip">Q&A</span><span class="chip">谢谢</span></div>`, {type:'cover', kicker:'BUILD THE SYSTEM · NOT THE PROMPT'})
 ];
 
