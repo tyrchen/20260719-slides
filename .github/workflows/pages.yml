@@ -30,6 +30,7 @@ jobs:
           mkdir -p dist/vendor
           cp index.html styles.css app.js content.js visuals.js charts.js dist/
           cp vendor/d3.v7.min.js vendor/d3.LICENSE dist/vendor/
+          node scripts/render-wechat-blog.mjs tubi-meetup-blog.md dist/blog.html
           touch dist/.nojekyll
 
       - name: Configure GitHub Pages
