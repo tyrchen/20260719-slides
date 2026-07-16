@@ -18,26 +18,44 @@
   function factors(el) {
     const c=colors(), svg=svgFor(el,1100,350);
     const data=[
-      ['模型','能不能做'],['上下文','知不知道为何做'],['任务拆分','每步是否可交付'],
-      ['反馈','失败能否快速暴露'],['验证','怎样证明正确'],['人的判断','方向与责任']
-    ].map(([title,sub],i)=>({title,sub,x:75+i*165}));
-    const y=152;
-    svg.append('line').attr('x1',52).attr('x2',1042).attr('y1',y).attr('y2',y).attr('stroke',c.accent).attr('stroke-width',8).attr('stroke-opacity',.1);
-    svg.append('line').attr('x1',52).attr('x2',1042).attr('y1',y).attr('y2',y).attr('stroke',c.accent).attr('stroke-width',2.5);
-    const nodes=svg.append('g').selectAll('g').data(data).join('g').attr('transform',d=>`translate(${d.x},${y})`);
-    nodes.append('circle').attr('r',34).attr('fill',c.bg).attr('stroke',c.accent).attr('stroke-width',2.2);
-    nodes.append('circle').attr('r',27).attr('fill',c.accent).attr('fill-opacity',.07).attr('stroke',c.accent).attr('stroke-opacity',.25);
-    nodes.append('text').attr('text-anchor','middle').attr('y',6).attr('fill',c.text).attr('font-size',16).attr('font-weight',700).text(d=>d.title);
-    nodes.append('text').attr('text-anchor','middle').attr('y',66).attr('fill',c.muted).attr('font-size',13).text(d=>d.sub);
-    nodes.append('text').attr('text-anchor','middle').attr('y',-54).attr('fill',c.accent).attr('font-size',11).attr('font-weight',650).text((d,i)=>String(i+1).padStart(2,'0'));
-    const output=svg.append('g').attr('transform','translate(1042,152)');
-    output.append('rect').attr('x',-43).attr('y',-48).attr('width',86).attr('height',96).attr('rx',4).attr('fill',c.accent).attr('fill-opacity',.12).attr('stroke',c.accent).attr('stroke-width',2);
-    output.append('text').attr('text-anchor','middle').attr('y',-4).attr('fill',c.accent).attr('font-size',18).attr('font-weight',760).text('可交付');
-    output.append('text').attr('text-anchor','middle').attr('y',20).attr('fill',c.text).attr('font-size',13).text('的结果');
-    svg.append('text').attr('x',550).attr('y',287).attr('text-anchor','middle').attr('fill',c.text).attr('font-size',18).attr('font-weight',650).text('任何一处断路，最后都不会有可靠的交付');
-    svg.append('text').attr('x',550).attr('y',318).attr('text-anchor','middle').attr('fill',c.muted).attr('font-size',14).text('把模型包在上下文、反馈、验证和人的判断之间');
-    const pulse=svg.append('circle').attr('cx',52).attr('cy',y).attr('r',5).attr('fill',c.text);
-    pulse.transition().duration(1700).ease(d3.easeCubicInOut).attr('cx',1042).attr('fill',c.accent);
+      ['模型','基础能力'],['上下文','项目为何这样做'],['任务拆分','每一步都能交付'],
+      ['反馈','失败及时暴露'],['验证','结果可以证明'],['人的判断','方向与责任']
+    ].map(([title,sub],i)=>({title,sub,x:12+i*143}));
+    const cardWidth=116, cardHeight=154, cardY=72;
+    const factors=svg.append('g').selectAll('g').data(data).join('g').attr('transform',d=>`translate(${d.x},${cardY})`);
+    factors.append('rect').attr('class','factor-card').attr('width',cardWidth).attr('height',cardHeight).attr('rx',4)
+      .attr('fill',c.accent).attr('fill-opacity',.055).attr('stroke',c.accent).attr('stroke-opacity',.55).attr('stroke-width',1.5);
+    factors.append('text').attr('x',14).attr('y',24).attr('fill',c.accent).attr('font-size',10).attr('font-weight',700)
+      .text((d,i)=>String(i+1).padStart(2,'0'));
+    factors.append('text').attr('x',cardWidth/2).attr('y',67).attr('text-anchor','middle').attr('fill',c.text).attr('font-size',18).attr('font-weight',750).text(d=>d.title);
+    factors.append('text').attr('x',cardWidth/2).attr('y',96).attr('text-anchor','middle').attr('fill',c.muted).attr('font-size',11).text(d=>d.sub);
+    factors.append('rect').attr('class','factor-level').attr('x',14).attr('y',126).attr('width',88).attr('height',5).attr('rx',2.5).attr('fill',c.accent).attr('fill-opacity',.78);
+    data.slice(0,-1).forEach((d,i)=>svg.append('text').attr('x',d.x+130).attr('y',cardY+84).attr('text-anchor','middle').attr('fill',c.accent).attr('font-size',24).attr('font-weight',500).text('×'));
+    svg.append('text').attr('x',875).attr('y',cardY+84).attr('text-anchor','middle').attr('fill',c.text).attr('font-size',25).attr('font-weight',650).text('=');
+    const output=svg.append('g').attr('transform',`translate(902,${cardY})`);
+    output.append('rect').attr('width',174).attr('height',cardHeight).attr('rx',4).attr('fill',c.accent).attr('fill-opacity',.12).attr('stroke',c.accent).attr('stroke-width',2);
+    output.append('text').attr('x',87).attr('y',29).attr('text-anchor','middle').attr('fill',c.accent).attr('font-size',10).attr('font-weight',700).text('PRODUCT');
+    const outputLabel=output.append('text').attr('x',87).attr('y',73).attr('text-anchor','middle').attr('fill',c.text).attr('font-size',21).attr('font-weight',800).text('可靠交付');
+    output.append('text').attr('x',87).attr('y',101).attr('text-anchor','middle').attr('fill',c.muted).attr('font-size',12).text('整体结果');
+    const outputLevel=output.append('rect').attr('x',18).attr('y',126).attr('width',138).attr('height',5).attr('rx',2.5).attr('fill',c.accent);
+    svg.append('text').attr('x',550).attr('y',278).attr('text-anchor','middle').attr('fill',c.text).attr('font-size',18).attr('font-weight',700).text('任何一项接近零，整体结果也会被拖低');
+    svg.append('text').attr('x',550).attr('y',310).attr('text-anchor','middle').attr('fill',c.muted).attr('font-size',13).text('模型能力不会替代上下文，生成速度也不会替代验证与责任');
+
+    let weakIndex=0;
+    const demonstrate=()=>{
+      if(!el.closest('.slide')?.classList.contains('active')) return;
+      const weak=factors.filter((d,i)=>i===weakIndex);
+      weak.select('.factor-card').transition().delay(850).duration(280).attr('stroke','#ff79b7').attr('fill-opacity',.015)
+        .transition().delay(430).duration(320).attr('stroke',c.accent).attr('fill-opacity',.055);
+      weak.select('.factor-level').transition().delay(850).duration(280).attr('width',12).attr('fill','#ff79b7')
+        .transition().delay(430).duration(320).attr('width',88).attr('fill',c.accent);
+      outputLevel.transition().delay(850).duration(280).attr('width',24).attr('fill','#ff79b7')
+        .transition().delay(430).duration(320).attr('width',138).attr('fill',c.accent)
+        .on('end',()=>{ weakIndex=(weakIndex+1)%data.length; demonstrate(); });
+      outputLabel.transition().delay(850).duration(1).text('整体被拖低').attr('fill','#ff79b7')
+        .transition().delay(700).duration(1).text('可靠交付').attr('fill',c.text);
+    };
+    demonstrate();
   }
 
   function evolution(el) {
@@ -205,7 +223,7 @@
     const final=svg.append('g').attr('transform','translate(945,42)');
     final.append('rect').attr('width',130).attr('height',206).attr('rx',4).attr('fill',lime).attr('fill-opacity',.1).attr('stroke',lime).attr('stroke-width',2);
     final.append('text').attr('x',65).attr('y',54).attr('text-anchor','middle').attr('fill',lime).attr('font-size',14).attr('font-weight',700).text('ALTERNATOR');
-    final.append('text').attr('x',65).attr('y',112).attr('text-anchor','middle').attr('fill',c.text).attr('font-size',34).attr('font-weight',800).text('457 / 457');
+    final.append('text').attr('x',65).attr('y',112).attr('text-anchor','middle').attr('fill',c.text).attr('font-size',24).attr('font-weight',800).text('457 / 457');
     final.append('text').attr('x',65).attr('y',145).attr('text-anchor','middle').attr('fill',c.muted).attr('font-size',13).text('选定用例');
     final.append('text').attr('x',65).attr('y',180).attr('text-anchor','middle').attr('fill',lime).attr('font-size',15).attr('font-weight',700).text('全部通过');
     svg.append('path').attr('d','M80,270 H1010').attr('stroke',c.line).attr('stroke-width',1.5);
@@ -617,47 +635,45 @@
     spokes.each(function(d,i){loopAlong(this,d.color,620+i*210,1450,4);});
   }
 
-  function value(el) {
-    const c=colors(), svg=svgFor(el,1100,380), m={l:90,r:55,t:40,b:60};
-    const data=[
-      ['架构取舍',82,88,34],['领域建模',65,82,31],['验证设计',91,68,30],['复杂调试',28,78,29],['事故分析',43,62,30],
-      ['模板代码',91,18,23],['机械迁移',78,32,22],['文档同步',62,38,22],['孤立实现',32,32,22],['无反馈生成',16,16,22]
-    ].map(([name,x,y,r])=>({name,x,y,r}));
-    const x=d3.scaleLinear().domain([0,100]).range([m.l,1100-m.r]), y=d3.scaleLinear().domain([0,100]).range([380-m.b,m.t]);
-    svg.append('rect').attr('x',x(50)).attr('y',m.t).attr('width',x(100)-x(50)).attr('height',y(50)-m.t).attr('fill',c.accent).attr('fill-opacity',.035);
-    svg.append('line').attr('x1',x(50)).attr('x2',x(50)).attr('y1',m.t).attr('y2',380-m.b).attr('stroke',c.line);
-    svg.append('line').attr('x1',m.l).attr('x2',1100-m.r).attr('y1',y(50)).attr('y2',y(50)).attr('stroke',c.line);
-    [
-      ['先借助工具',8,95,'start'],['值得长期投入',92,95,'end'],
-      ['容易被替代',8,5,'start'],['优先自动化',92,5,'end']
-    ].forEach(([t,px,py,anchor])=>svg.append('text').attr('x',x(px)).attr('y',y(py)).attr('text-anchor',anchor).attr('fill',c.accent).attr('fill-opacity',.68).attr('font-size',22).attr('font-weight',700).text(t));
-    const g=svg.append('g').selectAll('g').data(data).join('g').attr('transform',d=>`translate(${x(d.x)},${y(d.y)})`).attr('opacity',.48);
-    g.append('circle').attr('r',d=>d.r).attr('fill',d=>d.y>50?c.accent:'#657087').attr('fill-opacity',d=>d.y>50?.18:.12).attr('stroke',d=>d.y>50?c.accent:'#778293');
-    g.append('text').attr('text-anchor','middle').attr('dominant-baseline','middle').attr('fill',c.text).attr('font-size',14).attr('font-weight',600).text(d=>d.name);
-    g.transition().duration(650).delay((d,i)=>i*55).attr('opacity',1);
-    svg.append('text').attr('x',(m.l+1100-m.r)/2).attr('y',371).attr('text-anchor','middle').attr('fill',c.muted).attr('font-size',15).text('可验证性 →');
-    svg.append('text').attr('transform','rotate(-90)').attr('x',-(m.t+380-m.b)/2).attr('y',22).attr('text-anchor','middle').attr('fill',c.muted).attr('font-size',15).text('需要多少判断 →');
-  }
-
-  function roadmap(el) {
-    const c=colors(), svg=svgFor(el,1100,360);
-    const data=[
-      {day:'30',title:'建立一个闭环',lines:['选择真实重复任务','写清上下文与验收条件','补上回归测试'],x:170,y:225},
-      {day:'90',title:'交付端到端项目',lines:['让 Agent 跨越多个阶段','记录失败与修正','沉淀规则和工作流程'],x:550,y:145},
-      {day:'365',title:'形成长期能力',lines:['建立领域资产与方法','管理人和 Agent 协作','对复杂结果负责'],x:930,y:72}
+  function delegationMap(el) {
+    const c=colors(), svg=svgFor(el,1100,380), m={l:105,r:35,t:42,b:58}, pink='#ff79b7';
+    const x=d3.scaleLinear().domain([0,100]).range([m.l,1100-m.r]);
+    const y=d3.scaleLinear().domain([0,100]).range([380-m.b,m.t]);
+    const splitX=x(52), splitY=y(52);
+    const zones=[
+      {x:m.l,y:m.t,w:splitX-m.l,h:splitY-m.t,title:'人来定方向',anchor:'start'},
+      {x:splitX,y:m.t,w:1100-m.r-splitX,h:splitY-m.t,title:'自动执行 · 人工批准',anchor:'end'},
+      {x:m.l,y:splitY,w:splitX-m.l,h:380-m.b-splitY,title:'小范围试验',anchor:'start'},
+      {x:splitX,y:splitY,w:1100-m.r-splitX,h:380-m.b-splitY,title:'Agent 可独立执行',anchor:'end'}
     ];
-    const path=d3.path(); path.moveTo(data[0].x,data[0].y); path.bezierCurveTo(350,225,380,145,data[1].x,data[1].y); path.bezierCurveTo(730,145,770,72,data[2].x,data[2].y);
-    svg.append('path').attr('d',path.toString()).attr('fill','none').attr('stroke',c.accent).attr('stroke-width',9).attr('stroke-opacity',.08);
-    const line=svg.append('path').attr('d',path.toString()).attr('fill','none').attr('stroke',c.accent).attr('stroke-width',3);
-    const len=line.node().getTotalLength(); line.attr('stroke-dasharray',len).attr('stroke-dashoffset',len).transition().duration(1200).attr('stroke-dashoffset',0);
-    const nodes=svg.append('g').selectAll('g').data(data).join('g').attr('transform',d=>`translate(${d.x},${d.y})`).attr('opacity',.48);
-    nodes.append('circle').attr('r',39).attr('fill',c.bg).attr('stroke',c.accent).attr('stroke-width',2);
-    nodes.append('text').attr('text-anchor','middle').attr('y',7).attr('fill',c.accent).attr('font-size',25).attr('font-weight',700).text(d=>d.day);
-    nodes.append('text').attr('text-anchor','middle').attr('y',60).attr('fill',c.text).attr('font-size',19).attr('font-weight',650).text(d=>d.title);
-    nodes.each(function(d){ multiline(d3.select(this),d.lines,0,87,21).attr('text-anchor','middle').attr('fill',c.muted).attr('font-size',13); });
-    nodes.transition().duration(500).delay((d,i)=>i*260).attr('opacity',1);
-    svg.append('text').attr('x',170).attr('y',32).attr('fill',c.muted).attr('font-size',13).text('从一个可复现任务开始');
-    svg.append('text').attr('x',930).attr('y',337).attr('text-anchor','end').attr('fill',c.muted).attr('font-size',13).text('从会用工具，走向真正理解一个领域');
+    const zone=svg.append('g').selectAll('g').data(zones).join('g');
+    zone.append('rect').attr('x',d=>d.x).attr('y',d=>d.y).attr('width',d=>d.w).attr('height',d=>d.h)
+      .attr('fill',(d,i)=>i===3?c.accent:i===0?pink:c.accent).attr('fill-opacity',(d,i)=>i===3?.07:i===0?.045:.022).attr('stroke',c.line);
+    zone.append('text').attr('x',d=>d.anchor==='end'?d.x+d.w-15:d.x+15).attr('y',(d,i)=>i<2?d.y+24:d.y+d.h-14)
+      .attr('text-anchor',d=>d.anchor).attr('fill',(d,i)=>i===0?pink:c.accent).attr('font-size',14).attr('font-weight',750).text(d=>d.title);
+
+    const tasks=[
+      {name:'架构取舍',x:27,y:86,mode:'lead'}, {name:'领域建模',x:31,y:65,mode:'lead'},
+      {name:'验证设计',x:64,y:71,mode:'review'}, {name:'事故处理',x:84,y:82,mode:'review'},
+      {name:'复杂调试',x:48,y:48,mode:'assist'}, {name:'机械迁移',x:77,y:43,mode:'assist'},
+      {name:'文档同步',x:69,y:17,mode:'auto'}, {name:'模板代码',x:90,y:20,mode:'auto'}
+    ];
+    const taskColors={lead:pink,review:c.accent,assist:'#9a85d8',auto:'#c792ff'};
+    const tasksG=svg.append('g').selectAll('g').data(tasks).join('g').attr('transform',d=>`translate(${x(d.x)},${y(d.y)})`).attr('opacity',.72);
+    tasksG.append('rect').attr('x',-52).attr('y',-17).attr('width',104).attr('height',34).attr('rx',17)
+      .attr('fill',d=>taskColors[d.mode]).attr('fill-opacity',.12).attr('stroke',d=>taskColors[d.mode]).attr('stroke-width',1.4);
+    tasksG.append('text').attr('text-anchor','middle').attr('dominant-baseline','central').attr('fill',c.text).attr('font-size',14).attr('font-weight',650).text(d=>d.name);
+    tasksG.transition().duration(520).delay((d,i)=>i*55).attr('opacity',1);
+
+    const frontierData=[{x:34,y:0},{x:45,y:32},{x:60,y:62},{x:82,y:100}];
+    const frontierLine=d3.line().x(d=>x(d.x)).y(d=>y(d.y)).curve(d3.curveCatmullRom.alpha(.7));
+    const frontier=svg.append('path').datum(frontierData).attr('d',frontierLine).attr('fill','none').attr('stroke',c.accent).attr('stroke-width',2.2).attr('stroke-dasharray','7 7').attr('stroke-opacity',.58);
+    const frontierLength=frontier.node().getTotalLength();
+    frontier.attr('stroke-dasharray',`${frontierLength} ${frontierLength}`).attr('stroke-dashoffset',frontierLength)
+      .transition().duration(950).attr('stroke-dashoffset',0).transition().attr('stroke-dasharray','7 7');
+    svg.append('text').attr('x',x(57)).attr('y',y(58)-12).attr('fill',c.accent).attr('font-size',12).attr('font-weight',700).attr('paint-order','stroke').attr('stroke',c.bg).attr('stroke-width',5).text('授权边界');
+    svg.append('text').attr('x',(m.l+1100-m.r)/2).attr('y',371).attr('text-anchor','middle').attr('fill',c.muted).attr('font-size',15).text('机器能否独立验证 →');
+    svg.append('text').attr('transform','rotate(-90)').attr('x',-(m.t+380-m.b)/2).attr('y',24).attr('text-anchor','middle').attr('fill',c.muted).attr('font-size',15).text('失败影响 →');
   }
 
   function productLoop(el) {
@@ -773,7 +789,7 @@
     loopParticle(feedback.node(),palette.insight,350,2100,5);
   }
 
-  const renderers={factors,evolution,modelExpansion,rustackHistory,compatibility,system,powerTrace,knowledgeGraph,memoryLoop,imaginationLoop,convergence,flywheel,lifecycle,teamTopology,futureCompass,value,roadmap,productLoop};
+  const renderers={factors,evolution,modelExpansion,rustackHistory,compatibility,system,powerTrace,knowledgeGraph,memoryLoop,imaginationLoop,convergence,flywheel,lifecycle,teamTopology,futureCompass,delegationMap,productLoop};
   window.renderD3Chart = el => { const fn=renderers[el.dataset.chart]; if(fn && window.d3) fn(el); };
   window.renderChartsInSlide = slide => slide?.querySelectorAll('[data-chart]').forEach(window.renderD3Chart);
 })();
