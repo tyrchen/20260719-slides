@@ -16,16 +16,17 @@ const quotation = (text, note) => `<blockquote class="quote"><span class="quote-
 
 const slides = [
   // 01–06 开场
-  S('开场', '把 AI 变成<br><span class="accent">工程团队</span>', `<p class="lead">从 Rust 云服务、可穿戴设备、500 页技术书<br>到 AI 时代的工程师</p>${chip(['AI NATIVE ENGINEERING','4 TOPICS','81 SLIDES'])}`, {type:'cover', kicker:'AI NATIVE ENGINEERING · 2026', visual:VISUALS.hero}),
+  S('开场', '把 AI 变成<br><span class="accent">工程团队</span>', `<p class="lead">从 Rust 云服务、可穿戴设备、500 页技术书<br>到 AI 时代的工程师</p>${chip(['AI NATIVE ENGINEERING','4 TOPICS','82 SLIDES'])}`, {type:'cover', kicker:'AI NATIVE ENGINEERING · 2026', visual:VISUALS.hero}),
   S('开场', '今天不讲<br>“如何用 AI 写代码”', `<div class="compare"><div class="compare-side negative"><span class="eyebrow">临时性</span><h3>Prompt 技巧合集</h3><p>一次对话、一次生成；效果依赖当时的上下文与运气，同样的错误还会再犯。</p></div><div class="versus">转变</div><div class="compare-side highlight"><span class="eyebrow">可持续性</span><h3>工程系统</h3><p>规则写进仓库，任务有完成标准，失败会自动暴露；修过的问题不必一再重来。</p></div></div>${evidence('判断标准','关掉当前对话后，下一位 Agent 是否仍然知道怎么正确地继续工作？')}`),
   S('开场', '三个产物，<br>三个工程世界', `<div class="case-landscape"><div><span class="case-id">01 · 软件</span><h3>Rustack</h3><b>协议广度与兼容性</b><i>↓</i><strong>测试 · 兼容套件 · 性能基准</strong></div><div><span class="case-id">02 · 软硬件</span><h3>可穿戴设备</h3><b>功耗、无线与端云协同</b><i>↓</i><strong>仪器 · 实物 · 现场数据</strong></div><div><span class="case-id">03 · 知识</span><h3>技术书</h3><b>事实、结构与长期一致性</b><i>↓</i><strong>来源 · 审稿 · 读者理解</strong></div></div>`, {kicker:'THE ENGINEERING LANDSCAPE'}),
   S('开场', '这些东西是 AI<br>“生成”出来的吗？', quotation('<em>不是。</em> AI 写出了大量代码和文字；项目之所以成立，是因为背后有一套<strong>能持续运转的工程闭环</strong>。','代码和文字只是产物，能够反复交付的才是系统。'), {kicker:'THE QUESTION'}),
   S('开场', '从助手到系统', `<div class="d3-chart d3-evolution" data-chart="evolution" aria-label="AI 工程能力从代码补全演进到工程系统"></div><p class="chart-caption">变化不只来自模型变强，也来自上下文、分工和反馈逐步完善。</p>`, {kicker:'EVOLUTION'}),
   S('开场', 'AI 工程产能公式', `<div class="d3-chart d3-factors" data-chart="factors" aria-label="AI 工程产能因素网络"></div><p class="chart-caption">六项因素形成乘法关系：任何一项接近零，整个系统都会失效。</p>`, {kicker:'THE EQUATION'}),
 
-  // 07–23 Rustack
+  // 07–24 Rustack
   S('话题一 · Rustack', '01<br><span class="accent">构建协议型软件系统</span>', `<p class="lead">目标不是多写几个接口，而是让 AWS SDK 真能连、兼容性测试真能跑、每一次差距都能被看见。</p>${chip(['18 SERVICES','779 ROUTES','&lt; 1s BOOT','≈ 8MB'])}`, {type:'cover', kicker:'TOPIC 01 · SOFTWARE', visual:VISUALS.rustack}),
   S('话题一 · Rustack', '为什么做 Rustack？', `<div class="grid-2"><div>${list(['CI：每个 Job 都能快速拉起独立环境','本地开发：行为确定，不依赖云端账号与网络','集成测试：失败可以稳定复现','交付：单二进制与小镜像降低分发成本'])}</div><div class="card"><span class="eyebrow">PRODUCT THESIS</span><h3>不是“另一个 AWS”</h3><p>而是为 SDK 测试与本地开发优化的协议兼容层。</p>${chip(['单二进制','< 1s 启动','低内存','小镜像'])}</div></div>`, {kicker:'PROBLEM / OPPORTUNITY'}),
+  S('话题一 · Rustack', '92 天、146 次提交：Rustack 的研发历程', `<div class="d3-chart d3-rustack-history" data-chart="rustackHistory" aria-label="Rustack 从 S3 纵向切片、兼容性驱动、代码生成到运行时生态的 92 天研发历程"></div>${evidence('加速拐点','前 24 天完成 121 次提交，并从 S3 推进到 17 个服务；外部兼容性测试和配置化代码生成先后进入研发循环。')}`, {kicker:'COMMIT HISTORY · 2026.02.26—05.28'}),
   S('话题一 · Rustack', '先说清楚：做到什么才算成功', `<div class="compare"><div class="compare-side"><span class="eyebrow">不做什么</span>${list(['第一天支持全部 AWS 服务','重现 AWS 内部实现','用接口数量代替行为正确性'])}</div><div class="versus">边界</div><div class="compare-side highlight"><span class="eyebrow">做到什么</span>${list(['官方 SDK 无需改业务代码即可连接','同一输入得到可重复的响应与错误','用外部兼容性测试持续量化差距'])}</div></div>${evidence('验收问题','现有 AWS 集成测试，能不能只改服务地址就运行？')}`, {kicker:'SCOPE BEFORE CODE'}),
   S('话题一 · Rustack', '第一个纵向切片：S3', `<div class="architecture"><div class="node"><small>01</small><h3>客户端</h3><p>AWS CLI / SDK</p></div><div class="node"><small>02</small><h3>HTTP 协议</h3><p>路由、签名、XML</p></div><div class="node"><small>03</small><h3>业务逻辑</h3><p>Bucket / Object</p></div><div class="node"><small>04</small><h3>存储与响应</h3><p>内存后端</p></div></div>`, {kicker:'VERTICAL SLICE'}),
   S('话题一 · Rustack', '为什么是 S3？', `${cards([
@@ -51,10 +52,10 @@ const slides = [
   ],4), {kicker:'TAKEAWAY'}),
   S('话题一 · Rustack', '软件系统，最终由测试说话', `<div class="huge-number">TEST</div><p class="lead">协议测试、兼容性测试、性能基准与独立审查。</p>`, {type:'cover', kicker:'TOPIC 01 · CONCLUSION'}),
 
-  // 24 转场
+  // 25 转场
   S('转场', '从可重复的测试，<br>到不可忽略的现实', `<p class="lead">软件里的失败可以重放；物理世界还会加入温度、遮挡、冲击、噪声和人的动作。</p>${chip(['TEST → MEASURE','CODE → SIGNAL','ASSUMPTION → EXPERIMENT'])}`, {type:'cover', transition:true, kicker:'FROM BITS TO ATOMS', visual:VISUALS.softwareToHardware}),
 
-  // 25–42 Wearable
+  // 26–43 Wearable
   S('话题二 · 可穿戴', '02<br><span class="accent">打造软硬件全栈系统</span>', `<p class="lead">从脚下的 IMU、BLE 链路和手机训练会话，到云端的数据处理：每一个判断最终都要回到测量。</p>${chip(['EDGE','BLE','MOBILE','CLOUD','ML'])}`, {type:'cover', kicker:'TOPIC 02 · HARDWARE', visual:VISUALS.wearable}),
   S('话题二 · 可穿戴', '从产品想法开始，<br>不是从芯片开始', `<div class="compare"><div class="compare-side"><span class="eyebrow">VAGUE</span><h3>做一个足球传感器</h3><p>无法估算，也无法验收。</p></div><div class="versus">SPECIFY</div><div class="compare-side highlight"><span class="eyebrow">EXECUTABLE</span><h3>3 小时高强度运动</h3><p>明确采样、传输、延迟、并发与完整性。</p></div></div>`),
   S('话题二 · 可穿戴', '先把产品愿望写成工程约束', `<table class="mini-table"><thead><tr><th>用户怎么说</th><th>工程上看什么</th><th>怎样验证</th></tr></thead><tbody><tr><td>训练时感觉不到</td><td>重量、厚度、安装位置</td><td>佩戴与冲击测试</td></tr><tr><td>一场训练不断线</td><td>续航、丢包、缓存深度</td><td>电流曲线与压力测试</td></tr><tr><td>多人同时使用</td><td>连接数、时隙、射频拥塞</td><td>真实场地并发测试</td></tr><tr><td>数据能用于分析</td><td>采样率、同步误差、质量标志</td><td>标注数据与算法评估</td></tr></tbody></table>`, {kicker:'CONSTRAINT SURFACE'}),
@@ -78,10 +79,10 @@ const slides = [
   S('话题二 · 可穿戴', 'DEMO', ``, {type:'demo', kicker:'LIVE'}),
   S('话题二 · 可穿戴', '到了物理世界，只认测量结果', `<div class="huge-number">MEASURE</div><p class="lead">AI 可以帮你少走弯路，但不能替你测功耗、跑现场、看真实数据。</p>`, {type:'cover', kicker:'TOPIC 02 · CONCLUSION'}),
 
-  // 43 转场
+  // 44 转场
   S('转场', '从测量物理信号，<br>到建立读者信任', `<p class="lead">知识产品同样需要校准：事实靠来源，结构靠概念依赖，表达靠审稿，最终由读者理解来验证。</p>${chip(['SIGNAL → SOURCE','CALIBRATION → REVIEW','DATA → EXPLANATION'])}`, {type:'cover', transition:true, kicker:'FROM ATOMS TO IDEAS', visual:VISUALS.hardwareToKnowledge}),
 
-  // 44–57 Book
+  // 45–58 Book
   S('话题三 · AI 写书', '03<br><span class="accent">构建长期一致的知识系统</span>', `<p class="lead">单独写好一章不难，难的是几十万字始终讲同一件事、使用同一套概念，并且每个事实都有来处。</p>${chip(['PLAN','RESEARCH','DRAFT','REVIEW','BUILD'])}`, {type:'cover', kicker:'TOPIC 03 · KNOWLEDGE', visual:VISUALS.book}),
   S('话题三 · AI 写书', '写一本书，也是一项系统工程', `<div class="engineering-bridge"><div class="bridge-head"><span>软件工程</span><i>解决同类问题</i><span>写书</span></div><div><b>产品需求</b><i>先明确为谁服务</i><strong>读者约定</strong></div><div><b>系统架构</b><i>组织长期结构</i><strong>全书主线</strong></div><div><b>接口契约</b><i>保持边界一致</i><strong>术语与概念约定</strong></div><div><b>依赖关系图</b><i>安排先后关系</i><strong>知识脉络</strong></div><div><b>测试与检查</b><i>阻止错误进入</i><strong>事实与文风审查</strong></div><div><b>构建与发布</b><i>产生最终交付物</i><strong>PDF 与版本发布</strong></div></div>`),
   S('话题三 · AI 写书', '把“记忆”搬进仓库', `<div class="code">books/&lt;book-name&gt;/\n├── <span class="s">AGENTS.md</span>\n├── bukit.yaml\n├── <span class="s">plan/</span>\n├── <span class="s">chapters/</span>\n├── docs/{research,reviews}/\n├── assets/\n├── drafts/\n└── output/</div><p class="muted" style="margin-top:22px">不要让 Agent 记住整本书；让仓库记住最重要的约束。</p>`, {kicker:'REPOSITORY AS MEMORY'}),

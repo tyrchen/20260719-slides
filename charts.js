@@ -66,6 +66,91 @@
     svg.append('text').attr('x',1100-m.r).attr('y',330).attr('text-anchor','end').attr('fill',c.muted).attr('font-size',13).text('能力边界扩展 →');
   }
 
+  function rustackHistory(el) {
+    const c=colors(), svg=svgFor(el,1100,360);
+    const phaseData=[
+      {id:'01',name:'S3 纵向切片',commits:35},
+      {id:'02',name:'兼容性驱动扩展',commits:50},
+      {id:'03',name:'代码生成与批量扩张',commits:36},
+      {id:'04',name:'产品化与真实执行',commits:14},
+      {id:'05',name:'生态与运行时',commits:11}
+    ];
+    const daily=[
+      {d:0,b:0,f:0,v:0,s:1},{d:1,b:7,f:6,v:0,s:1},{d:2,b:2,f:13,v:3,s:2},{d:3,b:9,f:1,v:1,s:1},
+      {d:4,b:3,f:1,v:0,s:1},{d:7,b:5,f:5,v:1,s:1},{d:8,b:5,f:1,v:1,s:0},{d:9,b:2,f:3,v:1,s:1},
+      {d:10,b:1,f:3,v:1,s:1},{d:11,b:0,f:1,v:0,s:0},{d:19,b:6,f:4,v:1,s:0},{d:20,b:4,f:1,v:0,s:0},
+      {d:21,b:5,f:0,v:0,s:1},{d:22,b:2,f:2,v:0,s:0},{d:23,b:1,f:5,v:1,s:3},{d:27,b:1,f:0,v:0,s:0},
+      {d:28,b:0,f:0,v:0,s:1},{d:33,b:1,f:1,v:0,s:2},{d:47,b:1,f:0,v:0,s:0},{d:51,b:1,f:0,v:0,s:1},
+      {d:52,b:1,f:0,v:0,s:0},{d:55,b:0,f:1,v:0,s:0},{d:56,b:1,f:0,v:0,s:2},{d:88,b:0,f:2,v:0,s:5},
+      {d:89,b:0,f:0,v:0,s:1},{d:90,b:0,f:0,v:0,s:2},{d:91,b:0,f:0,v:0,s:1}
+    ];
+    const services=[
+      {d:1,n:1},{d:3,n:2},{d:4,n:3},{d:7,n:4},{d:8,n:5},{d:9,n:6},
+      {d:19,n:7},{d:20,n:10},{d:21,n:15},{d:22,n:17},{d:51,n:18},{d:91,n:18}
+    ];
+    const typeColors={b:c.accent,f:'#ff79b7',v:'#b9f46c',s:'#687385'};
+    const x=d3.scaleLinear().domain([0,91]).range([50,1050]);
+    const yService=d3.scaleLinear().domain([1,18]).range([190,82]);
+
+    svg.append('text').attr('x',22).attr('y',-1).attr('fill',c.muted).attr('font-size',10).attr('letter-spacing',1.4).text('五个阶段 · 提交数');
+    const phase=svg.append('g').selectAll('g').data(phaseData).join('g').attr('transform',(d,i)=>`translate(${22+i*214},7)`);
+    phase.append('rect').attr('width',202).attr('height',52).attr('rx',3).attr('fill',c.accent).attr('fill-opacity',(d,i)=>.035+i*.012).attr('stroke',c.accent).attr('stroke-opacity',.28);
+    phase.append('text').attr('x',13).attr('y',19).attr('fill',c.accent).attr('font-size',10).attr('font-weight',650).text(d=>d.id);
+    phase.append('text').attr('x',13).attr('y',40).attr('fill',c.text).attr('font-size',14).attr('font-weight',650).text(d=>d.name);
+    phase.append('text').attr('x',187).attr('y',35).attr('text-anchor','end').attr('fill',c.accent).attr('font-size',22).attr('font-weight',700).text(d=>d.commits);
+
+    const legend=[['b','功能'],['f','修复'],['v','测试 / CI'],['s','文档 / 工程']];
+    const legendGroup=svg.append('g').attr('transform','translate(730,70)');
+    legend.forEach(([type,label],i)=>{
+      legendGroup.append('circle').attr('cx',i*88).attr('cy',0).attr('r',3.5).attr('fill',typeColors[type]);
+      legendGroup.append('text').attr('x',7+i*88).attr('y',4).attr('fill',c.muted).attr('font-size',11).text(label);
+    });
+    svg.append('text').attr('x',50).attr('y',74).attr('fill',c.muted).attr('font-size',11).text('服务数量');
+
+    [1,6,12,18].forEach(value=>{
+      svg.append('line').attr('x1',50).attr('x2',1050).attr('y1',yService(value)).attr('y2',yService(value)).attr('stroke',c.line).attr('stroke-dasharray','2 8');
+      svg.append('text').attr('x',39).attr('y',yService(value)+4).attr('text-anchor','end').attr('fill',c.muted).attr('font-size',9).text(value);
+    });
+    const serviceLine=d3.line().x(d=>x(d.d)).y(d=>yService(d.n)).curve(d3.curveStepAfter);
+    svg.append('path').datum(services).attr('d',serviceLine).attr('fill','none').attr('stroke',c.accent).attr('stroke-width',8).attr('stroke-opacity',.08);
+    const growth=svg.append('path').datum(services).attr('d',serviceLine).attr('fill','none').attr('stroke',c.accent).attr('stroke-width',2.5);
+    const growthLength=growth.node().getTotalLength();
+    growth.attr('stroke-dasharray',growthLength).attr('stroke-dashoffset',growthLength).transition().duration(1500).ease(d3.easeCubicOut).attr('stroke-dashoffset',0);
+    svg.append('g').selectAll('circle').data(services.slice(0,-1)).join('circle').attr('cx',d=>x(d.d)).attr('cy',d=>yService(d.n)).attr('r',4).attr('fill',c.bg).attr('stroke',c.accent).attr('stroke-width',2);
+
+    const labels=[
+      {d:2,n:1,text:'S3 · Mint 8/15',dx:8,dy:-8,anchor:'start'},
+      {d:3,n:2,text:'DynamoDB · 457/457',dx:8,dy:18,anchor:'start'},
+      {d:19,n:7,text:'配置化代码生成',dx:9,dy:-10,anchor:'start'},
+      {d:22,n:17,text:'17 个服务',dx:9,dy:18,anchor:'start'},
+      {d:51,n:18,text:'CloudFront → 18',dx:9,dy:-9,anchor:'start'}
+    ];
+    svg.append('g').selectAll('text').data(labels).join('text').attr('x',d=>x(d.d)+d.dx).attr('y',d=>yService(d.n)+d.dy).attr('text-anchor',d=>d.anchor)
+      .attr('fill',c.text).attr('font-size',11).attr('font-weight',650).attr('paint-order','stroke').attr('stroke',c.bg).attr('stroke-width',4).text(d=>d.text);
+
+    const dots=[];
+    daily.forEach(day=>{
+      let index=0;
+      ['s','b','f','v'].forEach(type=>{
+        for(let i=0;i<day[type];i+=1) dots.push({day:day.d,type,index:index++});
+      });
+    });
+    svg.append('line').attr('x1',50).attr('x2',1050).attr('y1',326).attr('y2',326).attr('stroke',c.line);
+    const commitDots=svg.append('g').selectAll('circle').data(dots).join('circle')
+      .attr('cx',d=>x(d.day)+((d.index%2)*2.6-1.3)).attr('cy',d=>322-d.index*5.1).attr('r',2.8)
+      .attr('fill',d=>typeColors[d.type]).attr('opacity',.22);
+    commitDots.transition().delay((d,i)=>d.day*10+i*.8).duration(260).attr('opacity',.95);
+    svg.append('text').attr('x',50).attr('y',214).attr('fill',c.muted).attr('font-size',11).text('每个圆点代表一次提交');
+
+    const ticks=[{d:0,t:'02.26'},{d:19,t:'03.17'},{d:51,t:'04.18'},{d:91,t:'05.28'}];
+    ticks.forEach(t=>{
+      svg.append('line').attr('x1',x(t.d)).attr('x2',x(t.d)).attr('y1',326).attr('y2',332).attr('stroke',c.muted);
+      svg.append('text').attr('x',x(t.d)).attr('y',348).attr('text-anchor',t.d===0?'start':t.d===91?'end':'middle').attr('fill',c.muted).attr('font-size',10).text(t.t);
+    });
+    svg.append('line').attr('x1',x(91)).attr('x2',x(91)).attr('y1',206).attr('y2',326).attr('stroke','#c792ff').attr('stroke-opacity',.45).attr('stroke-dasharray','3 6');
+    svg.append('text').attr('x',x(91)-5).attr('y',221).attr('text-anchor','end').attr('fill','#c792ff').attr('font-size',10).attr('font-weight',650).text('Pulumi · 快照 · Squib');
+  }
+
   function compatibility(el) {
     const c = colors(), svg = svgFor(el, 440, 320), cx=220, cy=248, inner=118, outer=152;
     const arc = d3.arc().innerRadius(inner).outerRadius(outer).cornerRadius(5).startAngle(-Math.PI/2);
@@ -563,7 +648,7 @@
     loopParticle(feedback.node(),palette.insight,350,2100,5);
   }
 
-  const renderers={factors,evolution,compatibility,system,convergence,flywheel,lifecycle,teamTopology,futureCompass,value,roadmap,productLoop};
+  const renderers={factors,evolution,rustackHistory,compatibility,system,convergence,flywheel,lifecycle,teamTopology,futureCompass,value,roadmap,productLoop};
   window.renderD3Chart = el => { const fn=renderers[el.dataset.chart]; if(fn && window.d3) fn(el); };
   window.renderChartsInSlide = slide => slide?.querySelectorAll('[data-chart]').forEach(window.renderD3Chart);
 })();
