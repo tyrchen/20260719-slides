@@ -269,6 +269,8 @@ ul.clean li::before { content:""; width:7px; height:7px; background:var(--accent
 .d3-evolution { height:340px; }
 .d3-model-expansion { height:350px; }
 .d3-rustack-history { height:360px; }
+.d3-kinetic-history { height:360px; }
+.d3-kinetic-architecture { height:430px; }
 .d3-split { display:grid; grid-template-columns:minmax(420px,.85fr) minmax(0,1.15fr); gap:clamp(30px,5vw,80px); align-items:center; }
 .d3-compatibility { height:310px; }
 .d3-system { height:360px; }
@@ -518,6 +520,8 @@ kbd { font:500 10px "IBM Plex Mono",monospace; border:1px solid #4b5360; padding
   .d3-evolution { height:270px; }
   .d3-model-expansion { height:280px; }
   .d3-rustack-history { height:300px; }
+  .d3-kinetic-history { height:300px; }
+  .d3-kinetic-architecture { height:285px; }
   .d3-compatibility { height:275px; }
   .d3-system,.d3-lifecycle { height:280px; }
   .d3-power,.d3-knowledge,.d3-memory-loop,.d3-imagination { height:280px; }

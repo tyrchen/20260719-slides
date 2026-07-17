@@ -55,13 +55,15 @@ const slides = [
   // 25 转场
   S('转场', '从可重复的测试，<br>到不可忽略的现实', `<p class="lead">软件里的失败可以重放；物理世界还会加入温度、遮挡、冲击、噪声和人的动作。</p>${chip(['TEST → MEASURE','CODE → SIGNAL','ASSUMPTION → EXPERIMENT'])}`, {type:'cover', transition:true, kicker:'FROM BITS TO ATOMS', visual:VISUALS.softwareToHardware}),
 
-  // 26–43 Wearable
+  // 26–45 Wearable
   S('话题二 · 可穿戴', '02<br><span class="accent">打造软硬件全栈系统</span>', `<p class="lead">从脚下的 IMU、BLE 链路和手机训练会话，到云端的数据处理：每一个判断最终都要回到测量。</p>${chip(['EDGE','BLE','MOBILE','CLOUD','ML'])}`, {type:'cover', kicker:'TOPIC 02 · HARDWARE', visual:VISUALS.wearable}),
+  S('话题二 · 可穿戴', '3 天、116 次提交：Kinetic 从鞋端一路长到产品界面', `<div class="d3-chart d3-kinetic-history" data-chart="kineticHistory" aria-label="Kinetic 在 3 天内从 Reflex 鞋端固件、验证闭环、Cortex 接收端扩展到 Thalamus 控制平面和产品界面的 116 次提交"></div>${evidence('加速前提','前 57 次提交先把协议、Flash、BLE 修复和模拟验证做硬；后 59 次才把 Cortex、Thalamus 与 UI 顺着同一份契约展开。')}`, {kicker:'COMMIT HISTORY · 2026.06.19—06.21'}),
   S('话题二 · 可穿戴', '从产品想法开始，<br>不是从芯片开始', `<div class="compare"><div class="compare-side"><span class="eyebrow">VAGUE</span><h3>做一个足球传感器</h3><p>无法估算，也无法验收。</p></div><div class="versus">SPECIFY</div><div class="compare-side highlight"><span class="eyebrow">EXECUTABLE</span><h3>3 小时高强度运动</h3><p>明确采样、传输、延迟、并发与完整性。</p></div></div>`),
   S('话题二 · 可穿戴', '先把产品愿望写成工程约束', `<table class="mini-table"><thead><tr><th>用户怎么说</th><th>工程上看什么</th><th>怎样验证</th></tr></thead><tbody><tr><td>训练时感觉不到</td><td>重量、厚度、安装位置</td><td>佩戴与冲击测试</td></tr><tr><td>一场训练不断线</td><td>续航、丢包、缓存深度</td><td>电流曲线与压力测试</td></tr><tr><td>多人同时使用</td><td>连接数、时隙、射频拥塞</td><td>真实场地并发测试</td></tr><tr><td>数据能用于分析</td><td>采样率、同步误差、质量标志</td><td>标注数据与算法评估</td></tr></tbody></table>`, {kicker:'CONSTRAINT SURFACE'}),
   S('话题二 · 可穿戴', '先摸清陌生领域，再谈选型', `${flow(['用户目标','需要测什么','用什么传感器','怎样采样计算','怎样通信','手机端','云端','分析体验'])}<p class="muted" style="margin-top:34px">先弄清楚“还需要知道什么”，再决定“应该买什么”。</p>`, {kicker:'DOMAIN MAPPING'}),
   S('话题二 · 可穿戴', '候选答案 ≠ 工程事实', `<div class="grid-2"><div>${list(['MCU / IMU / GNSS','BLE / LTE-M / NB-IoT','电源 / PCB / 天线','固件 / iOS / 云端 / 机器学习'])}</div><div class="card"><span class="eyebrow">回到真实世界</span>${chip(['规格书','参考设计','开发板实测','电流分析仪','射频测试','真实运动数据'])}</div></div>`),
   S('话题二 · 可穿戴', '端到端架构', `<div class="architecture"><div class="node"><small>设备端</small><h3>鞋上传感器</h3><p>惯性传感器 · 微控制器 · 存储 · 电池<br>Rust Embassy 固件</p></div><div class="node"><small>手机端</small><h3>接收端</h3><p>Swift 界面 · Rust 核心<br>会话 / 对时 / 重试</p></div><div class="node"><small>云端</small><h3>控制平面</h3><p>认证 · API · S3 · DynamoDB<br>设备注册 / 无线升级</p></div><div class="node"><small>分析</small><h3>数据与模型</h3><p>遥测数据 · 特征处理<br>动作分类</p></div></div>`, {kicker:'SYSTEM VIEW'}),
+  S('话题二 · 可穿戴', '五个系统，靠两条反向链路连成一个产品', `<div class="d3-chart d3-kinetic-architecture" data-chart="kineticArchitecture" aria-label="Kinetic 全部 specs 定义的架构：Tendon、Reflex、Cortex、Thalamus 和 Cerebellum 通过数据向前流、控制与证据向后回连成产品，UI 是跨产品契约"></div>${evidence('架构主线','数据从 Tendon 流向 Cerebellum；配置、ACK、质量与模型证据反向回流。UI 只读 Thalamus 授权后的投影，不直连原始数据。')}`, {kicker:'96 SPECS · DATA FORWARD · CONTROL & EVIDENCE BACK'}),
   S('话题二 · 可穿戴', '一场训练，如何变成个性化洞察', `<div class="d3-chart d3-product-loop" data-chart="productLoop" aria-label="从球鞋传感器到手机、云端和个性化反馈的数据产品闭环"></div><p class="chart-caption">个人数据只有和自己的长期记录、同类人群放在一起比较，才可能变成有用的训练建议。</p>`, {kicker:'DATA PRODUCT LOOP · BLE → QUIC → INSIGHT'}),
   S('话题二 · 可穿戴', '五个系统必须一起设计', `<div class="d3-chart d3-system" data-chart="system" aria-label="五个系统围绕数据契约协同"></div>${evidence('协同原则','五个系统围绕同一份数据契约并行推进；它们之间是来回反馈，不是做完一个再交给下一个。')}`, {kicker:'CO-DESIGN · CONTRACT AT THE CENTER'}),
   S('话题二 · 可穿戴', '架构决策：<br>两只鞋如何通信？', `<div class="decision-matrix"><div class="dm-head"><span>连接方式</span><span>手机压力</span><span>同步难度</span><span>额外硬件</span><span>适合场景</span></div><div class="dm-row"><b>A</b><strong>双鞋 → 手机</strong><span class="level high">高</span><span class="level mid">中</span><span>无</span><em>个人原型</em></div><div class="dm-row"><b>B</b><strong>副鞋 → 主鞋 → 手机</strong><span class="level low">低</span><span class="level high">高</span><span>无</span><em>连接受限</em></div><div class="dm-row"><b>C</b><strong>双鞋 → 身体中继</strong><span class="level low">低</span><span class="level low">低</span><span>中继器</span><em>稳定训练</em></div><div class="dm-row"><b>D</b><strong>双鞋 → 场边接收器</strong><span class="level low">低</span><span class="level low">低</span><span>接收器</span><em>多人团队</em></div></div><p class="muted" style="margin-top:18px">这张表不给答案，只把原本藏着的取舍摆到台面上，方便讨论和实测。</p>`, {kicker:'ARCHITECTURE DECISION MATRIX'}),
@@ -79,10 +81,10 @@ const slides = [
   S('话题二 · 可穿戴', 'DEMO', ``, {type:'demo', kicker:'LIVE'}),
   S('话题二 · 可穿戴', '到了物理世界，只认测量结果', `<div class="huge-number">MEASURE</div><p class="lead">AI 可以帮你少走弯路，但不能替你测功耗、跑现场、看真实数据。</p>`, {type:'cover', kicker:'TOPIC 02 · CONCLUSION'}),
 
-  // 44 转场
+  // 46 转场
   S('转场', '从测量物理信号，<br>到建立读者信任', `<p class="lead">知识产品同样需要校准：事实靠来源，结构靠概念依赖，表达靠审稿，最终由读者理解来验证。</p>${chip(['SIGNAL → SOURCE','CALIBRATION → REVIEW','DATA → EXPLANATION'])}`, {type:'cover', transition:true, kicker:'FROM ATOMS TO IDEAS', visual:VISUALS.hardwareToKnowledge}),
 
-  // 45–58 Book
+  // 47–60 Book
   S('话题三 · AI 写书', '03<br><span class="accent">构建长期一致的知识系统</span>', `<p class="lead">单独写好一章不难，难的是几十万字始终讲同一件事、使用同一套概念，并且每个事实都有来处。</p>${chip(['PLAN','RESEARCH','DRAFT','REVIEW','BUILD'])}`, {type:'cover', kicker:'TOPIC 03 · KNOWLEDGE', visual:VISUALS.book}),
   S('话题三 · AI 写书', '写一本书，也是一项系统工程', `<div class="engineering-bridge"><div class="bridge-head"><span>软件工程</span><i>解决同类问题</i><span>写书</span></div><div><b>产品需求</b><i>先明确为谁服务</i><strong>读者约定</strong></div><div><b>系统架构</b><i>组织长期结构</i><strong>全书主线</strong></div><div><b>接口契约</b><i>保持边界一致</i><strong>术语与概念约定</strong></div><div><b>依赖关系图</b><i>安排先后关系</i><strong>知识脉络</strong></div><div><b>测试与检查</b><i>阻止错误进入</i><strong>事实与文风审查</strong></div><div><b>构建与发布</b><i>产生最终交付物</i><strong>PDF 与版本发布</strong></div></div>`),
   S('话题三 · AI 写书', '把“记忆”搬进仓库', `<div class="code">books/&lt;book-name&gt;/\n├── <span class="s">AGENTS.md</span>\n├── bukit.yaml\n├── <span class="s">plan/</span>\n├── <span class="s">chapters/</span>\n├── docs/{research,reviews}/\n├── assets/\n├── drafts/\n└── output/</div><p class="muted" style="margin-top:22px">不要让 Agent 记住整本书；让仓库记住最重要的约束。</p>`, {kicker:'REPOSITORY AS MEMORY'}),
@@ -103,7 +105,7 @@ const slides = [
   S('话题三 · AI 写书', 'DEMO', ``, {type:'demo', kicker:'LIVE'}),
   S('话题三 · AI 写书', '一本书，最后要过读者这一关', `<div class="huge-number">TRUST</div><p class="lead">事实有没有来源，论证能不能读懂，整本书是否值得信任。</p>`, {type:'cover', kicker:'TOPIC 03 · CONCLUSION'}),
 
-  // 59–64 统一方法论
+  // 61–66 统一方法论
   S('转场', '项目不同，做成事的方法相通', `<p class="lead">代码、设备和书稿看起来毫不相干；但都要先说清目标和边界，再让执行接受反馈，最后把教训留在项目里。</p>${chip(['目标与边界','执行','验证','项目记忆'])}`, {type:'cover', transition:true, kicker:'THREE WORLDS · ONE LOOP', visual:'<div class="d3-chart d3-convergence" data-chart="convergence" aria-label="软件、软硬件和知识三个工程世界汇入同一套工程闭环"></div>'}),
   S('统一方法论', '失败只有写回系统，才会变成下一次的起点', `<div class="d3-chart d3-memory-loop" data-chart="memoryLoop" aria-label="意图进入执行，软件测试、硬件测量和内容审稿产生外部证据，修正写入规格、测试和规则后回到下一次执行"></div>`, {kicker:'FAILURE → EVIDENCE → MEMORY'}),
   S('统一方法论', '实现更快后，工程师把时间花到哪里', `<div class="attention-shift"><div><span>实现成本高时</span><div class="attention-bar old"><i style="--w:48%">亲手实现</i><i style="--w:20%">问题与设计</i><i style="--w:18%">验证</i><i style="--w:14%">运行反馈</i></div></div><b class="shift-arrow">重心转移 →</b><div><span>AI 压缩实现后</span><div class="attention-bar new"><i style="--w:18%">实现</i><i style="--w:29%">问题与约束</i><i style="--w:28%">验证与审查</i><i style="--w:25%">运行反馈</i></div></div></div><p class="chart-caption">这是时间重心的概念示意，不是行业统计；变化的是比重，不是工程师突然多了新职责。</p>`),
@@ -116,7 +118,7 @@ const slides = [
   S('统一方法论', '把前面的做法，收成五组工程控制', `<div class="principle-controls"><div><span>01</span><b>记忆</b><p>上下文写进仓库<br>修正留给下一次</p></div><div><span>02</span><b>边界</b><p>先定义成功与非目标<br>以纵向切片推进</p></div><div><span>03</span><b>证据</b><p>先写验收条件<br>软件测试 · 硬件测量 · 写作来源</p></div><div><span>04</span><b>分工</b><p>研究、设计、实现、审查分开<br>AI 铺开，人把方向</p></div><div><span>05</span><b>约束</b><p>用确定性工具约束模型<br>让工程纪律被放大</p></div></div>`, {kicker:'FIVE ENGINEERING CONTROLS'}),
   S('统一方法论', 'AI 让构建、衡量、学习的每一轮更快', `<div class="d3-chart d3-flywheel" data-chart="flywheel" aria-label="AI 加速构建、衡量、学习飞轮，并串联软件、硬件和知识三个项目"></div>${evidence('持续优势','谁能用 AI 加快软件、硬件和知识生产的每一次循环，谁就能更快试错、更早学会，也更容易建立持续优势。')}`, {kicker:'BUILD · MEASURE · LEARN'}),
 
-  // 65–77 话题四：AI 时代的软件开发与职业规划
+  // 67–81 话题四与结尾：AI 时代的软件开发与职业规划
   S('转场', '当飞轮越转越快，工程师还负责什么？', `<p class="lead">AI 可以加快每一轮构建、衡量和学习。接下来要问：当这种速度成为常态，团队怎么分工，个人又该把时间花在哪里？</p>${chip(['交付 → 方向','产出 → 结果','工具 → 能力'])}`, {type:'cover', transition:true, kicker:'FROM METHOD TO CAREER', visual:VISUALS.systemToCareer}),
   S('话题四 · 下一站：工程师的未来', '04<br><span class="accent">下一站：工程师的未来</span>', `<p class="lead">AI 改变的不只是编码速度，也会改变我们怎样衡量产出、怎样组织团队，以及工程师靠什么建立长期价值。</p>${chip(['SOFTWARE','TEAM','CAREER','RESPONSIBILITY'])}`, {type:'cover', kicker:'TOPIC 04 · THE ENGINEER', visual:VISUALS.futureEngineer}),
   S('话题四 · 下一站：工程师的未来', '软件产出，该怎么衡量？', `<div class="production-shift"><div><span>容易统计的产物</span><strong>代码、PR、文件</strong><p>它们能说明发生了工作，不能说明问题已经解决。</p></div><i>→</i><div class="active"><span>真正需要负责的结果</span><strong>经过验证的新能力</strong><p>从需求、实现、测试一直到运行证据。</p></div></div>${evidence('看结果','别数 Agent 生成了多少文件，要看系统最后多了什么：能不能验证、能不能维护、能不能长期运行。')}`, {kicker:'UNIT OF PRODUCTION'}),

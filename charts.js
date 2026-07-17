@@ -206,6 +206,76 @@
     svg.append('text').attr('x',x(91)-5).attr('y',221).attr('text-anchor','end').attr('fill','#c792ff').attr('font-size',10).attr('font-weight',650).text('Pulumi · 快照 · Squib');
   }
 
+  function kineticHistory(el) {
+    const c=colors(), svg=svgFor(el,1100,360);
+    const palette=['#b9f46c','#59e3ff','#6b8cff','#ffad66','#c792ff'];
+    const phases=[
+      {id:'01',name:'Reflex 纵向切片',count:9,start:0,end:8,color:palette[0]},
+      {id:'02',name:'验证与契约加固',count:48,start:9,end:56,color:palette[1]},
+      {id:'03',name:'Cortex 与数据契约',count:7,start:57,end:63,color:palette[2]},
+      {id:'04',name:'Thalamus 控制平面',count:15,start:64,end:78,color:palette[3]},
+      {id:'05',name:'产品 UI 闭环',count:37,start:79,end:115,color:palette[4]}
+    ];
+    const x=d3.scaleLinear().domain([0,115]).range([50,1050]);
+    const y=d3.scaleLinear().domain([1,5]).range([194,92]);
+
+    svg.append('text').attr('x',22).attr('y',-1).attr('fill',c.muted).attr('font-size',10).attr('letter-spacing',1.4).text('五个阶段 · 提交数');
+    const phase=svg.append('g').selectAll('g').data(phases).join('g').attr('transform',(d,i)=>`translate(${22+i*214},7)`);
+    phase.append('rect').attr('width',202).attr('height',52).attr('rx',3).attr('fill',d=>d.color).attr('fill-opacity',.055).attr('stroke',d=>d.color).attr('stroke-opacity',.42);
+    phase.append('rect').attr('width',4).attr('height',52).attr('fill',d=>d.color).attr('fill-opacity',.9);
+    phase.append('text').attr('x',13).attr('y',19).attr('fill',d=>d.color).attr('font-size',10).attr('font-weight',700).text(d=>d.id);
+    phase.append('text').attr('x',13).attr('y',40).attr('fill',c.text).attr('font-size',13).attr('font-weight',650).text(d=>d.name);
+    phase.append('text').attr('x',187).attr('y',35).attr('text-anchor','end').attr('fill',d=>d.color).attr('font-size',22).attr('font-weight',750).text(d=>d.count);
+
+    svg.append('text').attr('x',50).attr('y',78).attr('fill',c.muted).attr('font-size',11).text('已落地的工程层');
+    [1,2,3,4,5].forEach(value=>{
+      svg.append('line').attr('x1',50).attr('x2',1050).attr('y1',y(value)).attr('y2',y(value)).attr('stroke',c.line).attr('stroke-dasharray','2 8');
+      svg.append('text').attr('x',39).attr('y',y(value)+4).attr('text-anchor','end').attr('fill',c.muted).attr('font-size',9).text(value);
+    });
+    const coverage=[
+      {i:0,n:1,label:'Reflex'},{i:58,n:2,label:'Cortex'},{i:61,n:3,label:'Data'},
+      {i:65,n:4,label:'Cloud'},{i:79,n:5,label:'UI'}
+    ];
+    const line=d3.line().x(d=>x(d.i)).y(d=>y(d.n)).curve(d3.curveStepAfter);
+    svg.append('path').datum(coverage).attr('d',line).attr('fill','none').attr('stroke',c.accent).attr('stroke-width',8).attr('stroke-opacity',.08);
+    const growth=svg.append('path').datum(coverage).attr('d',line).attr('fill','none').attr('stroke',c.accent).attr('stroke-width',2.5);
+    const growthLength=growth.node().getTotalLength();
+    growth.attr('stroke-dasharray',growthLength).attr('stroke-dashoffset',growthLength).transition().duration(1300).ease(d3.easeCubicOut).attr('stroke-dashoffset',0);
+    const milestones=svg.append('g').selectAll('g').data(coverage).join('g').attr('transform',d=>`translate(${x(d.i)},${y(d.n)})`);
+    milestones.append('circle').attr('r',4).attr('fill',c.bg).attr('stroke',c.accent).attr('stroke-width',2);
+    milestones.append('text').attr('x',7).attr('y',(d,i)=>i%2?-8:16).attr('fill',c.text).attr('font-size',10).attr('font-weight',650).attr('paint-order','stroke').attr('stroke',c.bg).attr('stroke-width',4).text(d=>d.label);
+
+    phases.slice(1).forEach(phaseBoundary=>{
+      svg.append('line').attr('x1',x(phaseBoundary.start-.5)).attr('x2',x(phaseBoundary.start-.5)).attr('y1',83).attr('y2',327).attr('stroke',phaseBoundary.color).attr('stroke-opacity',.2).attr('stroke-dasharray','3 7');
+    });
+    const dots=d3.range(116).map(i=>{
+      const phaseIndex=phases.findIndex(p=>i>=p.start && i<=p.end);
+      return {i,row:i%4,color:phases[phaseIndex].color};
+    });
+    svg.append('line').attr('x1',50).attr('x2',1050).attr('y1',326).attr('y2',326).attr('stroke',c.line);
+    const commitDots=svg.append('g').selectAll('circle').data(dots).join('circle')
+      .attr('cx',d=>x(d.i)).attr('cy',d=>321-d.row*5.3).attr('r',2.65).attr('fill',d=>d.color).attr('opacity',.18);
+    commitDots.transition().delay((d,i)=>i*6).duration(220).attr('opacity',.96);
+    svg.append('text').attr('x',50).attr('y',230).attr('fill',c.muted).attr('font-size',11).text('每个圆点代表一次提交');
+
+    const ticks=[{i:0,t:'06.19',anchor:'start'},{i:17,t:'06.20',anchor:'middle'},{i:69,t:'06.21',anchor:'middle'},{i:115,t:'116',anchor:'end'}];
+    ticks.forEach(t=>{
+      svg.append('line').attr('x1',x(t.i)).attr('x2',x(t.i)).attr('y1',326).attr('y2',332).attr('stroke',c.muted);
+      svg.append('text').attr('x',x(t.i)).attr('y',348).attr('text-anchor',t.anchor).attr('fill',c.muted).attr('font-size',10).text(t.t);
+    });
+    const annotations=[
+      {i:8,text:'Phase 0—6',y:249,anchor:'end'},
+      {i:55,text:'模拟器发布证据',y:266,anchor:'end'},
+      {i:58,text:'Cortex 端到端',y:247,anchor:'start'},
+      {i:78,text:'Cloud 可发布',y:266,anchor:'end'},
+      {i:114,text:'React 控制平面',y:247,anchor:'end'}
+    ];
+    annotations.forEach(a=>{
+      svg.append('line').attr('x1',x(a.i)).attr('x2',x(a.i)).attr('y1',a.y+5).attr('y2',299).attr('stroke',c.line).attr('stroke-dasharray','2 5');
+      svg.append('text').attr('x',x(a.i)+(a.anchor==='start'?5:-5)).attr('y',a.y).attr('text-anchor',a.anchor).attr('fill',c.text).attr('font-size',10).attr('font-weight',650).text(a.text);
+    });
+  }
+
   function compatibility(el) {
     const c=colors(), svg=svgFor(el,1100,330), pink='#ff79b7', lime='#b9f46c';
     const waves=[
@@ -251,6 +321,104 @@
     core.append('circle').attr('r',61).attr('fill',c.bg).attr('stroke',c.accent).attr('stroke-opacity',.4);
     core.append('text').attr('text-anchor','middle').attr('y',-5).attr('fill',c.accent).attr('font-size',22).attr('font-weight',700).text('数据契约');
     core.append('text').attr('text-anchor','middle').attr('y',22).attr('fill',c.muted).attr('font-size',11).text('格式 · 时间 · 版本 · 质量');
+  }
+
+  function kineticArchitecture(el) {
+    const c=colors(), svg=svgFor(el,1200,410);
+    const palette={tendon:'#b9f46c',reflex:'#59e3ff',cortex:'#6b8cff',thalamus:'#ffad66',cerebellum:'#c792ff',ui:'#ff79b7'};
+    const defs=svg.append('defs');
+    Object.entries(palette).forEach(([name,color])=>{
+      defs.append('marker').attr('id',`kinetic-${name}`).attr('viewBox','0 0 10 10').attr('refX',9).attr('refY',5)
+        .attr('markerWidth',5.5).attr('markerHeight',5.5).attr('orient','auto')
+        .append('path').attr('d','M0 0 L10 5 L0 10 Z').attr('fill',color);
+    });
+    const glow=defs.append('filter').attr('id','kinetic-glow');
+    glow.append('feGaussianBlur').attr('stdDeviation',2.7).attr('result','blur');
+
+    const ui=svg.append('g').attr('transform','translate(472,7)');
+    ui.append('rect').attr('width',712).attr('height',76).attr('rx',5).attr('fill',palette.ui).attr('fill-opacity',.045).attr('stroke',palette.ui).attr('stroke-opacity',.58).attr('stroke-dasharray','5 6');
+    ui.append('text').attr('x',17).attr('y',20).attr('fill',palette.ui).attr('font-size',10).attr('font-weight',750).attr('letter-spacing',1.2).text('UI 跨产品契约 · 不是第六个运行时');
+    const uiItems=[
+      {x:17,w:205,title:'移动训练',sub:'Today · Train · Growth · Video'},
+      {x:239,w:205,title:'授权投影 API',sub:'live · pending · stale · unavailable'},
+      {x:461,w:234,title:'运营控制面',sub:'Ops · Devices · Rollout · Replay'}
+    ];
+    const uiItem=ui.selectAll('g.ui-item').data(uiItems).join('g').attr('class','ui-item').attr('transform',d=>`translate(${d.x},28)`);
+    uiItem.append('rect').attr('width',d=>d.w).attr('height',35).attr('rx',3).attr('fill',palette.ui).attr('fill-opacity',.055).attr('stroke',palette.ui).attr('stroke-opacity',.25);
+    uiItem.append('text').attr('x',10).attr('y',15).attr('fill',c.text).attr('font-size',11).attr('font-weight',700).text(d=>d.title);
+    uiItem.append('text').attr('x',10).attr('y',29).attr('fill',c.muted).attr('font-size',8.5).text(d=>d.sub);
+
+    const nodes=[
+      {id:'tendon',name:'Tendon',role:'传感器',lines:['电源 · RF · 机械','校准 · 制造证据'],x:10},
+      {id:'reflex',name:'Reflex',role:'鞋端固件',lines:['采样 → Flash → BLE','修复 · OTA · 诊断'],x:248},
+      {id:'cortex',name:'Cortex',role:'接收器',lines:['对时 · Store-before-ACK','会话 · 恢复 · 上传'],x:486},
+      {id:'thalamus',name:'Thalamus',role:'云端控制平面',lines:['Auth · 设备 · 会话','Desired State · 审计'],x:724},
+      {id:'cerebellum',name:'Cerebellum',role:'数据 / ML',lines:['Raw → Bronze → Silver → Gold','Quality · Label · Model'],x:962}
+    ].map(d=>({...d,color:palette[d.id],cx:d.x+95}));
+    const nodeY=145, nodeW=190, nodeH=130;
+
+    const dataLinks=nodes.slice(0,-1).map((node,i)=>({
+      from:node,to:nodes[i+1],
+      label:['硬件','BLE','S3','EVENT'][i],
+      color:nodes[i+1].color
+    }));
+    const links=svg.append('g').selectAll('path').data(dataLinks).join('path')
+      .attr('d',d=>`M${d.from.x+nodeW},210 H${d.to.x}`)
+      .attr('fill','none').attr('stroke',d=>d.color).attr('stroke-width',2.4).attr('stroke-opacity',.75)
+      .attr('marker-end',d=>`url(#kinetic-${d.to.id})`);
+    dataLinks.forEach(d=>svg.append('text').attr('x',(d.from.x+nodeW+d.to.x)/2).attr('y',196).attr('text-anchor','middle').attr('fill',d.color).attr('font-size',8.5).attr('font-weight',750).text(d.label));
+
+    const node=svg.append('g').selectAll('g.runtime-node').data(nodes).join('g').attr('class','runtime-node').attr('transform',d=>`translate(${d.x},${nodeY})`);
+    node.append('rect').attr('width',nodeW).attr('height',nodeH).attr('rx',4).attr('fill',d=>d.color).attr('fill-opacity',.055).attr('stroke',d=>d.color).attr('stroke-opacity',.62);
+    node.append('rect').attr('width',5).attr('height',nodeH).attr('fill',d=>d.color);
+    node.append('text').attr('x',18).attr('y',27).attr('fill',d=>d.color).attr('font-size',11).attr('font-weight',750).attr('letter-spacing',.8).text(d=>d.name.toUpperCase());
+    node.append('text').attr('x',18).attr('y',57).attr('fill',c.text).attr('font-size',19).attr('font-weight',760).text(d=>d.role);
+    node.each(function(d){
+      const g=d3.select(this);
+      d.lines.forEach((lineText,i)=>g.append('text').attr('x',18).attr('y',88+i*23).attr('fill',i?c.muted:'#dce2ea').attr('font-size',10.5).text(lineText));
+    });
+
+    const control1=svg.append('path').attr('d','M819,145 C819,105 581,105 581,145').attr('fill','none').attr('stroke',palette.thalamus).attr('stroke-width',2.2).attr('stroke-opacity',.68).attr('stroke-dasharray','6 6').attr('marker-end','url(#kinetic-cortex)');
+    const control2=svg.append('path').attr('d','M581,145 C581,112 343,112 343,145').attr('fill','none').attr('stroke',palette.cortex).attr('stroke-width',2.2).attr('stroke-opacity',.68).attr('stroke-dasharray','6 6').attr('marker-end','url(#kinetic-reflex)');
+    svg.append('text').attr('x',700).attr('y',101).attr('text-anchor','middle').attr('fill',palette.thalamus).attr('font-size',9.5).attr('font-weight',650).text('配置 · Schema · Firmware');
+    svg.append('text').attr('x',462).attr('y',109).attr('text-anchor','middle').attr('fill',palette.cortex).attr('font-size',9.5).attr('font-weight',650).text('ACK / NACK · 对时 · DFU');
+
+    const evidencePath=svg.append('path').attr('d','M1057,275 C1057,321 819,321 819,275').attr('fill','none').attr('stroke',palette.cerebellum).attr('stroke-width',2.4).attr('stroke-opacity',.72).attr('stroke-dasharray','7 7').attr('marker-end','url(#kinetic-thalamus)');
+    svg.append('text').attr('x',938).attr('y',316).attr('text-anchor','middle').attr('fill',palette.cerebellum).attr('font-size',10).attr('font-weight',700).text('Gold 投影 · 质量 · 模型证据');
+
+    [nodes[2],nodes[3],nodes[4]].forEach((runtime,i)=>{
+      const uiTargetX=[591,829,1067][i];
+      svg.append('path').attr('d',`M${uiTargetX},83 V${nodeY-8}`).attr('fill','none').attr('stroke',palette.ui).attr('stroke-opacity',.28).attr('stroke-dasharray','3 6');
+    });
+
+    const verify=[
+      {title:'物理证据',sub:'仪器 · EVT / DVT / PVT'},
+      {title:'固件证据',sub:'Host · Renode · HITL'},
+      {title:'接收证据',sub:'崩溃恢复 · 双鞋 · 实机'},
+      {title:'权威证据',sub:'AuthZ · 幂等 · 审计'},
+      {title:'数据证据',sub:'Replay · Quality · ML gate'}
+    ];
+    const verifyGroup=svg.append('g').selectAll('g').data(verify).join('g').attr('transform',(d,i)=>`translate(${nodes[i].x},350)`);
+    verifyGroup.append('rect').attr('width',nodeW).attr('height',58).attr('rx',3).attr('fill',(d,i)=>nodes[i].color).attr('fill-opacity',.035).attr('stroke',(d,i)=>nodes[i].color).attr('stroke-opacity',.32);
+    verifyGroup.append('text').attr('x',14).attr('y',23).attr('fill',(d,i)=>nodes[i].color).attr('font-size',11).attr('font-weight',750).text(d=>d.title);
+    verifyGroup.append('text').attr('x',14).attr('y',43).attr('fill',c.muted).attr('font-size',9.5).text(d=>d.sub);
+    svg.append('text').attr('x',10).attr('y',339).attr('fill',c.muted).attr('font-size',9.5).attr('letter-spacing',1.1).text('每一层都有自己的现实校验');
+
+    const loopAlong=(pathNode,color,delay,duration,radius=3.5)=>{
+      const len=pathNode.getTotalLength(), particle=svg.append('circle').attr('r',radius).attr('fill',color).attr('opacity',0).attr('filter','url(#kinetic-glow)');
+      const run=()=>{
+        const slide=el.closest('.slide');
+        if(!particle.node()?.isConnected || !slide?.classList.contains('active')) { particle.interrupt().attr('opacity',0); return; }
+        particle.attr('opacity',0).transition().delay(delay).duration(duration).ease(d3.easeLinear).attr('opacity',1)
+          .attrTween('transform',()=>t=>{const p=pathNode.getPointAtLength(t*len);return `translate(${p.x},${p.y})`;})
+          .transition().duration(100).attr('opacity',0).on('end',run);
+      };
+      run();
+    };
+    links.each(function(d,i){loopAlong(this,d.color,220+i*160,1050,3.2);});
+    loopAlong(control1.node(),palette.thalamus,520,1500,3.5);
+    loopAlong(control2.node(),palette.cortex,760,1500,3.5);
+    loopAlong(evidencePath.node(),palette.cerebellum,900,1750,4);
   }
 
   function powerTrace(el) {
@@ -789,7 +957,7 @@
     loopParticle(feedback.node(),palette.insight,350,2100,5);
   }
 
-  const renderers={factors,evolution,modelExpansion,rustackHistory,compatibility,system,powerTrace,knowledgeGraph,memoryLoop,imaginationLoop,convergence,flywheel,lifecycle,teamTopology,futureCompass,delegationMap,productLoop};
+  const renderers={factors,evolution,modelExpansion,rustackHistory,kineticHistory,compatibility,system,kineticArchitecture,powerTrace,knowledgeGraph,memoryLoop,imaginationLoop,convergence,flywheel,lifecycle,teamTopology,futureCompass,delegationMap,productLoop};
   window.renderD3Chart = el => { const fn=renderers[el.dataset.chart]; if(fn && window.d3) fn(el); };
   window.renderChartsInSlide = slide => slide?.querySelectorAll('[data-chart]').forEach(window.renderD3Chart);
 })();
